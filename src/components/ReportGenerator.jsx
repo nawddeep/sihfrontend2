@@ -61,14 +61,14 @@ export default function ReportGenerator({ data, reportType = "fraud-summary" }) 
     <div className="flex flex-wrap gap-2">
       <button
         onClick={() => generateReport("fraud-summary")}
-        className="inline-flex items-center gap-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-xs font-medium text-slate-950 px-3 py-1.5 transition-colors"
+        className="inline-flex items-center gap-1.5 rounded-lg bg-primary-500 hover:bg-primary-400 active:scale-95 text-xs font-medium text-dark-950 px-3 py-1.5 transition-all duration-300 shadow-glow-sm hover:shadow-glow-md"
       >
         <FileDown className="w-3.5 h-3.5" />
         Fraud Report (JSON)
       </button>
       <button
         onClick={() => generateReport("verification-log")}
-        className="inline-flex items-center gap-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-200 px-3 py-1.5 transition-colors"
+        className="inline-flex items-center gap-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-xs font-medium text-dark-200 px-3 py-1.5 transition-colors"
       >
         <FileText className="w-3.5 h-3.5" />
         Export Logs
@@ -76,7 +76,7 @@ export default function ReportGenerator({ data, reportType = "fraud-summary" }) 
       {data && Array.isArray(data) && data.length > 0 && (
         <button
           onClick={exportAsCSV}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-xs font-medium text-slate-950 px-3 py-1.5 transition-colors"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-accent-500 hover:bg-accent-400 active:scale-95 text-xs font-medium text-dark-950 px-3 py-1.5 transition-all duration-300 shadow-glow-success hover:shadow-glow-lg"
         >
           <Download className="w-3.5 h-3.5" />
           Export CSV

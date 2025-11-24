@@ -1,22 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import { QrCode, Download, CheckCircle2 } from "lucide-react";
+import { generateSecureQRPayload } from "../services/simulationService";
 
 export default function SecureQRCredential({ studentId, documentId, documentName }) {
   const [isGenerated, setIsGenerated] = useState(false);
+  const [qrData, setQrData] = useState("{}");
   
-  const generateQRData = () => {
-    return JSON.stringify({
-      id: studentId,
-      doc: documentId,
-      docName: documentName || "Document",
-      timestamp: Date.now(),
-      hash: `0x${Math.random().toString(16).substr(2, 40)}`,
-      version: "1.0"
-    });
-  };
+  useEffect(() => {
+    let isMounted = true;
+    (async () => {
+      try {
+        const payload = await generateSecureQRPayload(studentId, documentId, documentName);
+        if (isMounted) {
+          setQrData(JSON.stringify(payload));
+        }
+      } catch (err) {
+        console.error("Failed to generate secure QR payload", err);
+      }
+    })();
 
-  const qrData = generateQRData();
+    return () => {
+      isMounted = false;
+    };
+  }, [studentId, documentId, documentName]);
 
   const downloadQR = () => {
     const svg = document.querySelector('#qr-code-canvas');
@@ -40,10 +47,10 @@ export default function SecureQRCredential({ studentId, documentId, documentName
   };
 
   return (
-    <div className="flex flex-col items-center gap-3 p-4 bg-slate-950 rounded-xl border border-slate-800">
+    <div className="flex flex-col items-center gap-3 p-4 bg-dark-950 rounded-xl border border-primary-500/30 shadow-glow-sm">
       <div className="flex items-center gap-2 mb-1">
-        <QrCode className="w-4 h-4 text-sky-400" />
-        <span className="text-xs font-semibold text-slate-300">
+        <QrCode className="w-4 h-4 text-primary-400" />
+        <span className="text-xs font-semibold text-dark-300">
           Secure QR Credential
         </span>
       </div>
@@ -59,17 +66,17 @@ export default function SecureQRCredential({ studentId, documentId, documentName
           />
         </div>
         {isGenerated && (
-          <div className="absolute inset-0 flex items-center justify-center bg-emerald-500/20 rounded-lg">
-            <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+          <div className="absolute inset-0 flex items-center justify-center bg-accent-500/20 rounded-lg">
+            <CheckCircle2 className="w-6 h-6 text-accent-400" />
           </div>
         )}
       </div>
       
       <div className="text-center space-y-1">
-        <p className="text-[10px] text-slate-400 text-center max-w-[180px]">
+        <p className="text-[10px] text-dark-400 text-center max-w-[180px]">
           Scan to verify document authenticity
         </p>
-        <div className="flex items-center justify-center gap-1 text-[9px] text-slate-500">
+        <div className="flex items-center justify-center gap-1 text-[9px] text-dark-500">
           <span className="font-mono">{studentId}</span>
           {documentId && (
             <>
@@ -83,25 +90,25 @@ export default function SecureQRCredential({ studentId, documentId, documentName
       <div className="flex gap-2 w-full">
         <button
           onClick={() => setIsGenerated(true)}
-          className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-xs font-medium text-slate-950 py-1.5 transition-colors"
+          className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg bg-primary-500 hover:bg-primary-400 active:scale-95 text-xs font-medium text-dark-950 py-1.5 transition-all duration-300 shadow-glow-sm hover:shadow-glow-md"
         >
           <QrCode className="w-3.5 h-3.5" />
           Generate
         </button>
         <button
           onClick={downloadQR}
-          className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-200 py-1.5 transition-colors"
+          className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg bg-dark-800 hover:bg-dark-700 text-xs font-medium text-dark-200 py-1.5 transition-colors"
         >
           <Download className="w-3.5 h-3.5" />
           Download
         </button>
       </div>
       
-      <div className="w-full pt-2 border-t border-slate-800">
-        <div className="text-[9px] text-slate-500 space-y-0.5">
+      <div className="w-full pt-2 border-t border-dark-800">
+        <div className="text-[9px] text-dark-500 space-y-0.5">
           <div className="flex justify-between">
             <span>Security Level:</span>
-            <span className="text-emerald-300">High (H)</span>
+            <span className="text-accent-300">High (H)</span>
           </div>
           <div className="flex justify-between">
             <span>Error Correction:</span>

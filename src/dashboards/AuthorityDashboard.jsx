@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { authorityOverview, fraudCases, analyticsSeries } from "../mockData";
+import { authorityOverview, fraudCases, analyticsSeries, stateWiseFraudData } from "../mockData";
 import {
   Globe2,
   Map,
@@ -11,9 +11,9 @@ import {
   Ban,
   ShieldOff,
 } from "lucide-react";
-import NotificationSystem from "../components/NotificationSystem";
 import AdvancedAnalytics from "../components/AdvancedAnalytics";
 import ReportGenerator from "../components/ReportGenerator";
+import IndiaFraudHeatmap from "../components/IndiaFraudHeatmap";
 import {
   ResponsiveContainer,
   BarChart,
@@ -32,6 +32,8 @@ const COLORS = ["#22c55e", "#facc15", "#f97373"];
 
 export default function AuthorityDashboard() {
   const [cases, setCases] = useState(fraudCases);
+  const [selectedState, setSelectedState] = useState(null);
+  const [analyticsTab, setAnalyticsTab] = useState("fraud");
 
   const suspendEntity = (id) => {
     setCases((prev) =>
@@ -42,10 +44,12 @@ export default function AuthorityDashboard() {
   const { activeExams, centresOnline, totalCandidates, flaggedCandidates } =
     authorityOverview;
 
+  const visibleCases = selectedState
+    ? cases.filter((c) => c.stateCode === selectedState)
+    : cases;
+
   return (
     <div className="px-4 md:px-6 py-5 space-y-6">
-      <NotificationSystem />
-      
       <section className="grid xl:grid-cols-[1.4fr,1.6fr] gap-4 md:gap-6">
         <div className="space-y-4">
           <div className="rounded-2xl bg-slate-950/80 border border-slate-800/80 p-4 md:p-5">
@@ -149,16 +153,32 @@ export default function AuthorityDashboard() {
           <div className="flex items-center justify-between mb-3">
             <div>
               <div className="text-xs font-semibold text-slate-300 uppercase tracking-wide">
-                Country / Region Map
+                India Fraud Heat Map
               </div>
               <p className="text-[11px] text-slate-500">
-                Placeholder for heatmap of centres, fraud hotspots & device health.
+                State-wise fraud density and verification performance.
               </p>
             </div>
             <Map className="w-5 h-5 text-slate-200" />
           </div>
-          <div className="flex-1 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-xs text-slate-500">
-            Interactive Map / State-wise Heatmap Placeholder
+          <div className="flex-1 rounded-xl bg-slate-900 border border-slate-800 p-3 flex flex-col gap-3">
+            <div className="flex items-center justify-between text-[11px] text-slate-300">
+              <span>
+                {selectedState
+                  ? `Focused on ${Object.keys(stateWiseFraudData).find(
+                      (name) => stateWiseFraudData[name].state_code === selectedState
+                    )}`
+                  : "All States"}
+              </span>
+              <span className="text-slate-500 text-[10px]">
+                Click a tile to drill down
+              </span>
+            </div>
+            <IndiaFraudHeatmap
+              data={stateWiseFraudData}
+              selectedState={selectedState}
+              onStateSelect={setSelectedState}
+            />
           </div>
         </div>
       </section>
@@ -180,7 +200,7 @@ export default function AuthorityDashboard() {
             </div>
           </div>
           <div className="space-y-2 text-xs max-h-64 overflow-auto pr-1">
-            {cases.map((c) => (
+            {visibleCases.map((c) => (
               <div
                 key={c.id}
                 className="rounded-xl bg-slate-950 border border-slate-800 px-3 py-3 flex flex-col gap-2"

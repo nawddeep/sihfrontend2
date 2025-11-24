@@ -12,6 +12,8 @@ import StudentDashboard from "./dashboards/StudentDashboard.jsx";
 import CentreStaffDashboard from "./dashboards/CentreStaffDashboard.jsx";
 import SecurityDashboard from "./dashboards/SecurityDashboard.jsx";
 import AuthorityDashboard from "./dashboards/AuthorityDashboard.jsx";
+import CyberLayout from "./components/CyberLayout.jsx";
+import CyberButton from "./components/CyberButton.jsx";
 
 export const AuthContext = createContext(null);
 
@@ -35,17 +37,33 @@ function LoginPage({ onLogin }) {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [manualRole, setManualRole] = useState("auto");
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const getPasswordStrength = () => {
+    if (!password) return { label: "", level: 0 };
+    let score = 0;
+    if (password.length >= 8) score += 1;
+    if (/[A-Z]/.test(password)) score += 1;
+    if (/[0-9]/.test(password)) score += 1;
+    if (/[^A-Za-z0-9]/.test(password)) score += 1;
+
+    if (score <= 1) return { label: "Weak", level: 1 };
+    if (score === 2) return { label: "Medium", level: 2 };
+    return { label: "Strong", level: 3 };
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
 
-    let role = detectRoleFromId(userId);
+    let role = detectRoleFromId(userId.trim());
     if (!role && manualRole !== "auto") {
       role = manualRole;
     }
 
-    if (!userId || !password) {
+    if (!userId.trim() || !password) {
       setError("Please enter both User ID and Password.");
       return;
     }
@@ -56,147 +74,177 @@ function LoginPage({ onLogin }) {
       return;
     }
 
-    onLogin({
-      id: userId,
-      name: "Demo User",
-      role,
-    });
+    setError("");
+    setIsSubmitting(true);
+
+    // Simulate an async authentication flow
+    setTimeout(() => {
+      onLogin({
+        id: userId.trim(),
+        name: "Demo User",
+        role,
+        rememberMe,
+      });
+      setIsSubmitting(false);
+    }, 600);
   };
 
+  const { label: strengthLabel, level: strengthLevel } = getPasswordStrength();
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 px-4">
-      <div className="max-w-5xl w-full grid md:grid-cols-2 gap-10 items-center">
-        <div className="space-y-6">
-          <div className="inline-flex items-center gap-2 rounded-full bg-slate-900/70 px-3 py-1 border border-slate-700/60 text-xs font-medium text-sky-300">
-            <Shield className="w-4 h-4" />
-            Smart India Hackathon — Prototype
-          </div>
-          <h1 className="text-3xl md:text-4xl font-semibold leading-snug">
-            Fake Degree & Exam Security
-            <span className="block text-sky-400">
-              Unified Verification Platform
-            </span>
-          </h1>
-          <p className="text-sm md:text-base text-slate-300 max-w-md">
-            One login, multiple roles. Seamlessly switch between Student,
-            Centre, Security, and Higher Authority dashboards with live mock
-            analytics and fraud monitoring.
-          </p>
-          <div className="grid grid-cols-3 gap-3 text-xs">
-            <div className="rounded-xl bg-slate-900/70 border border-slate-800 px-3 py-3">
-              <div className="flex items-center gap-2 text-sky-300 mb-1">
-                <GraduationCap className="w-4 h-4" />
-                <span>Academic</span>
-              </div>
-              <p className="text-slate-400">
-                Instant cross-check of uploaded degrees & certificates.
-              </p>
-            </div>
-            <div className="rounded-xl bg-slate-900/70 border border-slate-800 px-3 py-3">
-              <div className="flex items-center gap-2 text-emerald-300 mb-1">
-                <Building2 className="w-4 h-4" />
-                <span>Centres</span>
-              </div>
-              <p className="text-slate-400">
-                Biometric logs, attendance and fraud heatmaps.
-              </p>
-            </div>
-            <div className="rounded-xl bg-slate-900/70 border border-slate-800 px-3 py-3">
-              <div className="flex items-center gap-2 text-rose-300 mb-1">
-                <Siren className="w-4 h-4" />
-                <span>Security</span>
-              </div>
-              <p className="text-slate-400">
-                Camera feeds, device health and fraud alerts in one view.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-slate-950/80 border border-slate-800/80 rounded-2xl shadow-xl shadow-sky-900/20 p-6 md:p-8 backdrop-blur">
-          <div className="flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-sky-500/10 flex items-center justify-center border border-sky-500/40">
-              <Shield className="w-6 h-6 text-sky-400" />
-            </div>
-            <div>
-              <h2 className="text-lg font-semibold">
-                Unified SIH Verification Login
-              </h2>
-              <p className="text-xs text-slate-400">
-                Use demo IDs like STU123, CEN001, SEC007, ADM999
-              </p>
+    <CyberLayout>
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <div className="max-w-md w-full">
+          <div className="mb-6 flex items-center gap-2 justify-center text-xs text-dark-400">
+            <div className="inline-flex items-center gap-2 rounded-full bg-dark-900/70 px-3 py-1 border border-primary-500/40 text-primary-300 shadow-glow-sm">
+              <Shield className="w-4 h-4" />
+              Smart India Hackathon — Prototype
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-slate-300">
-                User ID
-              </label>
-              <input
-                type="text"
-                value={userId}
-                onChange={(e) => setUserId(e.target.value)}
-                placeholder="e.g., STU2025A001 / CEN-MH-23"
-                className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-              />
+          <div className="bg-slate-950/80 backdrop-blur-md border border-slate-800/80 rounded-2xl shadow-glow-md p-6 md:p-8 transition-transform duration-200 hover:-translate-y-0.5">
+            <div className="mb-6">
+              <h1 className="text-xl md:text-2xl font-semibold tracking-wide text-slate-50">
+                Unified Verification Login
+              </h1>
+              <p className="mt-1 text-xs text-slate-300">
+                Sign in with a role-aware demo ID like
+                <span className="font-mono ml-1">STU123</span>,
+                <span className="font-mono ml-1">CEN001</span>,
+                <span className="font-mono ml-1">SEC007</span>,
+                <span className="font-mono ml-1">ADM999</span>.
+              </p>
             </div>
 
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-slate-300">
-                Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-              />
-            </div>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-slate-300 uppercase tracking-wide">
+                  User ID
+                </label>
+                <input
+                  type="text"
+                  value={userId}
+                  onChange={(e) => setUserId(e.target.value)}
+                  placeholder="e.g., STU2025A001 / CEN-MH-23"
+                  className="w-full rounded-lg bg-slate-900 border border-slate-800 px-3 py-2 text-sm text-slate-50 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors"
+                />
+              </div>
 
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-slate-300 flex justify-between">
-                <span>Role (Optional Override)</span>
-                <span className="text-[10px] text-slate-500">
-                  Auto-detected from prefix if set to Auto
-                </span>
-              </label>
-              <select
-                value={manualRole}
-                onChange={(e) => setManualRole(e.target.value)}
-                className="w-full rounded-lg bg-slate-900 border border-slate-700 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+              <div className="space-y-2">
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-slate-300 uppercase tracking-wide">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full rounded-lg bg-slate-900 border border-slate-800 px-3 py-2 text-sm text-slate-50 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors"
+                  />
+                </div>
+                {strengthLabel && (
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between text-[10px] text-slate-400">
+                      <span>Password strength</span>
+                      <span
+                        className={
+                          strengthLabel === "Strong"
+                            ? "text-emerald-300"
+                            : strengthLabel === "Medium"
+                            ? "text-amber-300"
+                            : "text-rose-300"
+                        }
+                      >
+                        {strengthLabel}
+                      </span>
+                    </div>
+                    <div className="flex gap-1">
+                      {[1, 2, 3].map((i) => (
+                        <div
+                          key={i}
+                          className={`flex-1 h-1.5 rounded-full bg-slate-800 ${
+                            i <= strengthLevel
+                              ? strengthLabel === "Strong"
+                                ? "bg-emerald-400"
+                                : strengthLabel === "Medium"
+                                ? "bg-amber-400"
+                                : "bg-rose-400"
+                              : ""
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-slate-300 uppercase tracking-wide flex justify-between">
+                  <span>Role (optional override)</span>
+                  <span className="text-[10px] text-slate-500">
+                    Auto-detected from ID prefix when set to Auto
+                  </span>
+                </label>
+                <select
+                  value={manualRole}
+                  onChange={(e) => setManualRole(e.target.value)}
+                  className="w-full rounded-lg bg-slate-900 border border-slate-800 px-3 py-2 text-sm text-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors"
+                >
+                  <option value="auto">Auto detect from User ID</option>
+                  <option value="student">Student</option>
+                  <option value="centre_staff">Centre / Institute Staff</option>
+                  <option value="security">Security Staff</option>
+                  <option value="admin">Higher Authority</option>
+                </select>
+              </div>
+
+              <div className="flex items-center justify-between text-[11px] text-slate-400">
+                <label className="inline-flex items-center gap-2 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className="h-3.5 w-3.5 rounded border border-slate-700 bg-slate-900 text-sky-500 focus:ring-sky-500"
+                  />
+                  <span>Remember me on this device</span>
+                </label>
+                <button
+                  type="button"
+                  className="text-sky-400 hover:text-sky-300 transition-colors"
+                  onClick={() => {
+                    // Placeholder for future password reset flow
+                    setError("Password reset is not wired for this demo.");
+                  }}
+                >
+                  Forgot password?
+                </button>
+              </div>
+
+              {error && (
+                <div className="text-xs text-rose-300 bg-rose-950/40 border border-rose-500/40 rounded-lg px-3 py-2 shadow-glow-danger">
+                  {error}
+                </div>
+              )}
+
+              <CyberButton
+                type="submit"
+                className="w-full mt-1"
+                leftIcon={UserCircle2}
+                disabled={isSubmitting}
               >
-                <option value="auto">Auto detect from User ID</option>
-                <option value="student">Student</option>
-                <option value="centre_staff">Centre / Institute Staff</option>
-                <option value="security">Security Staff</option>
-                <option value="admin">Higher Authority</option>
-              </select>
-            </div>
+                {isSubmitting ? "Signing in..." : "Sign in to Dashboard"}
+              </CyberButton>
+            </form>
 
-            {error && (
-              <div className="text-xs text-rose-400 bg-rose-500/10 border border-rose-500/40 rounded-lg px-3 py-2">
-                {error}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-sky-500 hover:bg-sky-400 text-sm font-medium text-slate-950 py-2.5 mt-1 transition-colors"
-            >
-              <UserCircle2 className="w-4 h-4" />
-              Sign in to Dashboard
-            </button>
-          </form>
-
-          <p className="mt-4 text-[11px] text-slate-500">
-            This is a frontend-only prototype using mock data. Actions like
-            Suspend, Verify etc. update local state to demonstrate flows.
-          </p>
+            <p className="mt-4 text-[11px] text-slate-400">
+              This is a frontend-only prototype using mock data. Actions like
+              Suspend, Verify, etc. update local state only to demonstrate flows.
+            </p>
+          </div>
         </div>
       </div>
-    </div>
+    </CyberLayout>
   );
 }
 
@@ -228,100 +276,111 @@ function AppShell() {
   }
 
   return (
-    <div className="min-h-screen flex bg-slate-950 text-slate-50">
-      <aside className="hidden md:flex w-60 flex-col border-r border-slate-800 bg-gradient-to-b from-slate-950 to-slate-900/90">
-        <div className="flex items-center gap-2 px-5 py-4 border-b border-slate-800/80">
-          <div className="w-9 h-9 rounded-xl bg-sky-500/10 flex items-center justify-center border border-sky-500/40">
-            <Shield className="w-5 h-5 text-sky-400" />
-          </div>
-          <div>
-            <div className="text-xs tracking-wide text-sky-300">
-              SIH Prototype
-            </div>
-            <div className="text-sm font-semibold leading-tight">
-              Degree & Exam Security
-            </div>
-          </div>
-        </div>
-        <nav className="flex-1 px-3 py-4 text-xs space-y-1">
-          <div className="px-2 text-slate-500 uppercase tracking-wide mb-1">
-            Current Role
-          </div>
-          <button className="w-full flex items-center gap-2 rounded-lg bg-sky-500/10 border border-sky-500/40 px-3 py-2 text-[13px] text-sky-100">
-            <Icon className="w-4 h-4" />
-            <span>{dashboardTitle}</span>
-          </button>
-          <div className="mt-4 px-2 text-slate-500 uppercase tracking-wide mb-1">
-            Quick Context
-          </div>
-          <div className="space-y-1">
-            <div className="rounded-lg bg-slate-900 border border-slate-800 px-3 py-2 text-[11px] text-slate-300">
-              <span className="font-semibold text-sky-300">Live Mock Mode</span>
-              <br />
-              Data, fraud alerts and verifications are simulated.
-            </div>
-            <div className="rounded-lg bg-slate-900 border border-slate-800 px-3 py-2 text-[11px] text-slate-300">
-              <span className="font-semibold text-emerald-300">Role Routing</span>
-              <br />
-              Single SPA with conditional dashboards.
-            </div>
-          </div>
-        </nav>
-        <div className="border-t border-slate-800 px-4 py-3 text-xs flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full bg-slate-800/80 flex items-center justify-center">
-              <UserCircle2 className="w-4 h-4 text-slate-200" />
+    <CyberLayout>
+      <div className="flex flex-1">
+        <aside className="hidden md:flex w-60 flex-col border-r border-dark-800 bg-gradient-to-b from-dark-950/95 to-dark-900/90 backdrop-blur-sm">
+          <div className="flex items-center gap-2 px-5 py-4 border-b border-dark-800/80">
+            <div className="w-9 h-9 rounded-xl bg-primary-500/10 flex items-center justify-center border border-primary-500/40 shadow-glow-sm">
+              <Shield className="w-5 h-5 text-primary-400" />
             </div>
             <div>
-              <div className="font-medium truncate max-w-[110px]">
-                {user.id}
+              <div className="text-xs tracking-wide text-primary-300">
+                SIH Prototype
               </div>
-              <div className="text-[10px] text-slate-400">
-                {roleLabels[user.role]}
+              <div className="text-sm font-semibold leading-tight">
+                Degree & Exam Security
               </div>
             </div>
           </div>
-          <button
-            onClick={logout}
-            className="inline-flex items-center gap-1 text-slate-400 hover:text-rose-400"
-          >
-            <LogOut className="w-4 h-4" />
-          </button>
-        </div>
-      </aside>
+          <nav className="flex-1 px-3 py-4 text-xs space-y-1">
+            <div className="px-2 text-dark-500 uppercase tracking-wide mb-1">
+              Current Role
+            </div>
+            <button className="w-full flex items-center gap-2 rounded-lg bg-primary-500/10 border border-primary-500/40 px-3 py-2 text-[13px] text-primary-100 shadow-glow-sm">
+              <Icon className="w-4 h-4" />
+              <span>{dashboardTitle}</span>
+            </button>
+            <div className="mt-4 px-2 text-dark-500 uppercase tracking-wide mb-1">
+              Quick Context
+            </div>
+            <div className="space-y-1">
+              <div className="rounded-lg bg-dark-900 border border-dark-800 px-3 py-2 text-[11px] text-dark-300">
+                <span className="font-semibold text-primary-300">Live Mock Mode</span>
+                <br />
+                Data, fraud alerts and verifications are simulated.
+              </div>
+              <div className="rounded-lg bg-dark-900 border border-dark-800 px-3 py-2 text-[11px] text-dark-300">
+                <span className="font-semibold text-accent-300">Role Routing</span>
+                <br />
+                Single SPA with conditional dashboards.
+              </div>
+            </div>
+          </nav>
+          <div className="border-t border-dark-800 px-4 py-3 text-xs flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-full bg-dark-800/80 flex items-center justify-center">
+                <UserCircle2 className="w-4 h-4 text-dark-200" />
+              </div>
+              <div>
+                <div className="font-medium truncate max-w-[110px]">
+                  {user.id}
+                </div>
+                <div className="text-[10px] text-dark-400">
+                  {roleLabels[user.role]}
+                </div>
+              </div>
+            </div>
+            <CyberButton
+              variant="ghost"
+              size="sm"
+              onClick={logout}
+              leftIcon={LogOut}
+              className="!px-2 !py-1 text-[11px] text-dark-400 hover:text-danger-300"
+            >
+              Logout
+            </CyberButton>
+          </div>
+        </aside>
 
-      <main className="flex-1 flex flex-col">
-        <header className="flex items-center justify-between px-4 md:px-6 py-3 border-b border-slate-800 bg-slate-950/90 backdrop-blur sticky top-0 z-10">
-          <div className="flex items-center gap-2">
-            <Icon className="w-5 h-5 text-sky-400 md:hidden" />
-            <div>
-              <div className="text-xs text-slate-500 uppercase tracking-wide">
-                {roleLabels[user.role]}
-              </div>
-              <div className="text-sm md:text-base font-semibold">
-                {user.role === "student"
-                  ? "Academic Record & Document Verification"
-                  : user.role === "centre_staff"
-                  ? "Exam Centre Operations & Bulk Checks"
-                  : user.role === "security"
-                  ? "Live Floor Security & Biometric Alerts"
-                  : "National-Level Fraud & Analytics Overview"}
+        <main className="flex-1 flex flex-col">
+          <header className={`flex items-center justify-between px-4 md:px-6 py-3 border-b bg-dark-950/90 backdrop-blur sticky top-0 z-10 ${
+            user.role === "student" || user.role === "admin" 
+              ? "border-dark-800" 
+              : "border-primary-500/20 shadow-glow-sm"
+          }`}>
+            <div className="flex items-center gap-2">
+              <Icon className="w-5 h-5 text-primary-400 md:hidden" />
+              <div>
+                <div className="text-xs text-dark-500 uppercase tracking-wide">
+                  {roleLabels[user.role]}
+                </div>
+                <div className="text-sm md:text-base font-semibold">
+                  {user.role === "student"
+                    ? "Academic Record & Document Verification"
+                    : user.role === "centre_staff"
+                    ? "Exam Centre Operations & Bulk Checks"
+                    : user.role === "security"
+                    ? "Live Floor Security & Biometric Alerts"
+                    : "National-Level Fraud & Analytics Overview"}
+                </div>
               </div>
             </div>
+            <CyberButton
+              variant="outline"
+              size="sm"
+              onClick={logout}
+              leftIcon={LogOut}
+              className="hidden md:inline-flex"
+            >
+              Logout
+            </CyberButton>
+          </header>
+          <div className="flex-1 overflow-auto bg-gradient-to-b from-dark-950 to-dark-900">
+            {dashboard}
           </div>
-          <button
-            onClick={logout}
-            className="inline-flex items-center gap-1.5 rounded-full border border-slate-700 bg-slate-900/80 px-3 py-1.5 text-[11px] md:text-xs text-slate-200 hover:border-rose-500/70 hover:text-rose-300"
-          >
-            <LogOut className="w-3 h-3" />
-            <span>Logout</span>
-          </button>
-        </header>
-        <div className="flex-1 overflow-auto bg-gradient-to-b from-slate-950 to-slate-900">
-          {dashboard}
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
+    </CyberLayout>
   );
 }
 
