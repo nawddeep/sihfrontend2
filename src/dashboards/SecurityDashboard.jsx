@@ -15,6 +15,11 @@ import {
   Shield,
   Radio,
   TerminalSquare,
+  Sparkles,
+  ShieldCheck,
+  Radar,
+  BellRing,
+  Fingerprint,
 } from "lucide-react";
 import NotificationSystem from "../components/NotificationSystem";
 import FaceMatchVisualization from "../components/FaceMatchVisualization";
@@ -32,32 +37,145 @@ export default function SecurityDashboard() {
     (a, b) => b.riskScore - a.riskScore
   );
 
-  return (
-    <div className="px-4 md:px-6 py-5 space-y-4">
-      <NotificationSystem />
+  const heroStats = [
+    {
+      label: "CCTV coverage",
+      value: `${securityScore}%`,
+      detail: `${workingCams}/${totalCams} cameras streaming`,
+      accent: "from-rose-400/90 to-emerald-400/70",
+      icon: Camera,
+    },
+    {
+      label: "Offline incidents",
+      value: offlineCams,
+      detail: "Immediate technician dispatch",
+      accent: "from-amber-400/80 to-rose-400/60",
+      icon: WifiOff,
+    },
+    {
+      label: "Fraud queue",
+      value: criticalAlerts.length,
+      detail: "Awaiting acknowledgement",
+      accent: "from-rose-500/80 to-pink-400/60",
+      icon: Siren,
+    },
+  ];
 
-      {/* Tab bar */}
-      <div className="border-b border-slate-800 mb-2 flex flex-wrap gap-2 text-xs">
-        {[
-          { id: "monitoring", label: "Live Monitoring" },
-          { id: "alerts", label: "Active Alerts" },
-          { id: "biometrics", label: "Biometric Logs" },
-          { id: "devices", label: "Device Health" },
-          { id: "access", label: "Access Logs" },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`px-3 py-1.5 rounded-full border text-[11px] transition-colors ${
-              activeTab === tab.id
-                ? "bg-rose-500/10 border-rose-500 text-rose-300"
-                : "bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-600"
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+  const opsSignals = [
+    {
+      icon: ShieldCheck,
+      tone: "text-emerald-200",
+      text: "Zero tamper warnings on biometric vaults",
+    },
+    {
+      icon: Radar,
+      tone: "text-sky-200",
+      text: "All RF jammers synced < 3 min ago",
+    },
+    {
+      icon: BellRing,
+      tone: "text-rose-200",
+      text: `${biometricAlerts.length} biometric escalations pending triage`,
+    },
+  ];
+
+  const tabItems = [
+    { id: "monitoring", label: "Monitoring", helper: "CCTV + score" },
+    { id: "alerts", label: "Alerts", helper: "Fraud feed" },
+    { id: "biometrics", label: "Biometrics", helper: "Anomaly table" },
+    { id: "devices", label: "Devices", helper: "RF health" },
+    { id: "access", label: "Access Log", helper: "Digital trail" },
+  ];
+
+  return (
+    <div className="relative min-h-full pb-16">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,114,182,0.18),transparent_60%),radial-gradient(circle_at_bottom,_rgba(56,189,248,0.15),transparent_45%)]" />
+      <div className="relative px-4 md:px-6 py-6 space-y-6">
+        <NotificationSystem />
+
+        <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950/95 via-slate-950 to-slate-950/90 px-5 py-6 md:px-8 md:py-8 text-slate-50 shadow-[0_25px_80px_rgba(2,6,23,0.6)] fade-up-soft">
+          <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_top,_rgba(239,68,68,0.35),transparent_55%),radial-gradient(circle_at_bottom,_rgba(6,182,212,0.25),transparent_50%)]" />
+          <div className="relative z-10 flex flex-col gap-6">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              <div className="space-y-3">
+                <div className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 border border-white/10 text-[11px] uppercase tracking-[0.25em] text-rose-100">
+                  <Sparkles className="w-4 h-4 text-amber-300" />
+                  Security Command Deck
+                </div>
+                <div>
+                  <h1 className="text-2xl md:text-3xl font-semibold text-white">
+                    Live Floor Security & Fraud Mitigation
+                  </h1>
+                  <p className="text-sm text-slate-300">
+                    Unified situational awareness for centre-level security leads.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col items-start lg:items-end gap-3 text-xs text-slate-300">
+                <div className="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 border border-emerald-500/40 px-3 py-1 text-emerald-200">
+                  <ShieldCheck className="w-4 h-4" />
+                  Biometric vaults lock-in
+                </div>
+                <div className="flex items-center gap-2 text-slate-300">
+                  <Radar className="w-4 h-4 text-sky-300" />
+                  Device heartbeat synced 2 mins ago
+                </div>
+                <div className="flex items-center gap-2 text-slate-400">
+                  <Fingerprint className="w-4 h-4 text-rose-200" />
+                  {biometricAlerts.length} biometric anomalies today
+                </div>
+              </div>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {heroStats.map((stat, idx) => {
+                const Icon = stat.icon;
+                return (
+                  <div
+                    key={stat.label}
+                    className={`rounded-2xl border border-white/10 bg-white/5 px-4 py-4 flex flex-col gap-2 fade-up-soft fade-delay-${idx + 1}`}
+                  >
+                    <div className="flex items-center justify-between text-[11px] uppercase tracking-wide text-slate-300">
+                      <span>{stat.label}</span>
+                      <Icon className="w-4 h-4 text-white/70" />
+                    </div>
+                    <div className="text-2xl font-semibold text-white">{stat.value}</div>
+                    <div className="text-[11px] text-slate-400">{stat.detail}</div>
+                    <div className={`h-1.5 w-16 rounded-full bg-gradient-to-r ${stat.accent}`} />
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex flex-wrap gap-2 text-[11px] text-slate-200 fade-up-soft fade-delay-3">
+              {opsSignals.map(({ icon: Icon, tone, text }) => (
+                <span
+                  key={text}
+                  className={`inline-flex items-center gap-1 rounded-full bg-white/5 px-3 py-1 border border-white/10 ${tone}`}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  {text}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <div className="rounded-2xl bg-slate-950/80 border border-slate-800/80 p-2 flex flex-wrap gap-2 text-xs fade-up-soft fade-delay-4">
+          {tabItems.map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex-1 min-w-[130px] rounded-xl px-3 py-2 text-left transition-all ${
+                activeTab === tab.id
+                  ? "bg-rose-500/10 border border-rose-400/60 text-rose-100 shadow-[0_0_25px_rgba(244,63,94,0.3)]"
+                  : "border border-transparent text-slate-400 hover:border-slate-700 hover:text-slate-200"
+              }`}
+            >
+              <div className="text-[11px] font-semibold">{tab.label}</div>
+              <div className="text-[10px] text-slate-500">{tab.helper}</div>
+            </button>
+          ))}
+        </div>
 
       <section className="grid lg:grid-cols-[minmax(0,1fr)_18rem] gap-4 md:gap-6">
         {/* Main content by tab */}
@@ -445,6 +563,7 @@ export default function SecurityDashboard() {
           </div>
         </aside>
       </section>
+      </div>
     </div>
   );
 }

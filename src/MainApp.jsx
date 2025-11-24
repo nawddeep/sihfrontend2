@@ -7,6 +7,10 @@ import {
   Building2,
   Siren,
   LineChart,
+  Sparkles,
+  Fingerprint,
+  Globe,
+  BadgeCheck,
 } from "lucide-react";
 import StudentDashboard from "./dashboards/StudentDashboard.jsx";
 import CentreStaffDashboard from "./dashboards/CentreStaffDashboard.jsx";
@@ -40,6 +44,38 @@ function LoginPage({ onLogin }) {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const statTiles = [
+    {
+      label: "Institutions piloting",
+      value: "120+",
+      delta: "+32 this quarter",
+    },
+    {
+      label: "Verifications / day",
+      value: "48K",
+      delta: "Peak load tested",
+    },
+    {
+      label: "Fraud prevented",
+      value: "82 Cr",
+      delta: "Simulated risk savings",
+    },
+  ];
+
+  const highlights = [
+    "Role-aware routing across 4 authority levels",
+    "Zero-paper compliance logs & tamper alerts",
+    "AI boosted cross-check for biometrics + docs",
+    "1-click escalations for national audit cells",
+  ];
+
+  const roleInfo = [
+    { label: "Learners", detail: "Access verified marksheets", icon: GraduationCap },
+    { label: "Centres", detail: "Bulk admit-card unlocks", icon: Building2 },
+    { label: "Security", detail: "Live biometric watch", icon: Siren },
+    { label: "National Cell", detail: "Macro fraud analytics", icon: LineChart },
+  ];
 
   const getPasswordStrength = () => {
     if (!password) return { label: "", level: 0 };
@@ -93,154 +129,243 @@ function LoginPage({ onLogin }) {
 
   return (
     <CyberLayout>
-      <div className="min-h-screen flex items-center justify-center px-4">
-        <div className="max-w-md w-full">
-          <div className="mb-6 flex items-center gap-2 justify-center text-xs text-dark-400">
-            <div className="inline-flex items-center gap-2 rounded-full bg-dark-900/70 px-3 py-1 border border-primary-500/40 text-primary-300 shadow-glow-sm">
-              <Shield className="w-4 h-4" />
-              Smart India Hackathon — Prototype
+      <div className="relative min-h-screen overflow-hidden bg-[#02040a] text-slate-100">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(27,82,255,0.25),transparent_55%),radial-gradient(circle_at_bottom,_rgba(12,228,201,0.18),transparent_45%)]" />
+        <div className="absolute inset-0 opacity-30 mix-blend-screen">
+          <div className="h-full w-full bg-[linear-gradient(130deg,rgba(10,10,18,0.9),transparent_45%),linear-gradient(310deg,rgba(14,26,44,0.9),transparent_35%)]" />
+        </div>
+
+        <div className="relative z-10 max-w-6xl mx-auto px-4 py-10 md:py-14">
+          <div className="flex flex-wrap items-center gap-3 text-xs text-slate-300/80 mb-6">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 border border-white/10 backdrop-blur">
+              <Sparkles className="w-4 h-4 text-amber-300" />
+              SIH Prototype · Winter '25 Sprint
+            </div>
+            <div className="inline-flex items-center gap-2 rounded-full bg-primary-500/10 px-3 py-1 border border-primary-500/30 text-primary-200 shadow-glow-sm">
+              <BadgeCheck className="w-4 h-4" />
+              Trusted by 30+ pilot universities
             </div>
           </div>
 
-          <div className="bg-slate-950/80 backdrop-blur-md border border-slate-800/80 rounded-2xl shadow-glow-md p-6 md:p-8 transition-transform duration-200 hover:-translate-y-0.5">
-            <div className="mb-6">
-              <h1 className="text-xl md:text-2xl font-semibold tracking-wide text-slate-50">
-                Unified Verification Login
-              </h1>
-              <p className="mt-1 text-xs text-slate-300">
-                Sign in with a role-aware demo ID like
-                <span className="font-mono ml-1">STU123</span>,
-                <span className="font-mono ml-1">CEN001</span>,
-                <span className="font-mono ml-1">SEC007</span>,
-                <span className="font-mono ml-1">ADM999</span>.
-              </p>
-            </div>
+          <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+            <section className="space-y-6">
+              <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md p-6 md:p-8 shadow-glow-md">
+                <div className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-primary-200 mb-3">
+                  <Shield className="w-4 h-4" />
+                  Unified Trust Portal
+                </div>
+                <h1 className="text-2xl md:text-4xl font-semibold text-white leading-tight">
+                  Zero-compromise verification for results, centres & live security ops.
+                </h1>
+                <p className="mt-3 text-sm text-slate-300/90 max-w-2xl">
+                  Log in once, route everywhere. The new login orchestrates dashboards for students, institutes,
+                  security cells and the national command centre—while retaining audit-grade traceability.
+                </p>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-300 uppercase tracking-wide">
-                  User ID
-                </label>
-                <input
-                  type="text"
-                  value={userId}
-                  onChange={(e) => setUserId(e.target.value)}
-                  placeholder="e.g., STU2025A001 / CEN-MH-23"
-                  className="w-full rounded-lg bg-slate-900 border border-slate-800 px-3 py-2 text-sm text-slate-50 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors"
-                />
+                <div className="mt-6 grid sm:grid-cols-3 gap-3">
+                  {statTiles.map((stat) => (
+                    <div
+                      key={stat.label}
+                      className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/8 to-transparent p-4"
+                    >
+                      <div className="text-2xl font-semibold">{stat.value}</div>
+                      <div className="text-[11px] uppercase tracking-wider text-white/60">
+                        {stat.label}
+                      </div>
+                      <div className="mt-1 text-[11px] text-emerald-300/80">{stat.delta}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-300 uppercase tracking-wide">
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    className="w-full rounded-lg bg-slate-900 border border-slate-800 px-3 py-2 text-sm text-slate-50 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors"
-                  />
-                </div>
-                {strengthLabel && (
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-between text-[10px] text-slate-400">
-                      <span>Password strength</span>
-                      <span
-                        className={
-                          strengthLabel === "Strong"
-                            ? "text-emerald-300"
-                            : strengthLabel === "Medium"
-                            ? "text-amber-300"
-                            : "text-rose-300"
-                        }
+              <div className="rounded-2xl border border-white/10 bg-dark-950/60 backdrop-blur">
+                <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/10">
+                  <div className="p-6 space-y-4">
+                    {roleInfo.map(({ label, detail, icon: Icon }) => (
+                      <div
+                        key={label}
+                        className="flex items-start gap-3 rounded-xl border border-white/5 bg-white/5 p-3"
                       >
-                        {strengthLabel}
-                      </span>
+                        <div className="w-9 h-9 rounded-xl bg-primary-500/10 border border-primary-500/30 flex items-center justify-center text-primary-200">
+                          <Icon className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <div className="text-sm font-semibold">{label}</div>
+                          <div className="text-[12px] text-slate-300">{detail}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="p-6 space-y-3">
+                    <div className="flex items-center gap-2 text-[12px] uppercase tracking-[0.3em] text-slate-400">
+                      <Fingerprint className="w-4 h-4" />
+                      Why it feels different
                     </div>
-                    <div className="flex gap-1">
-                      {[1, 2, 3].map((i) => (
-                        <div
-                          key={i}
-                          className={`flex-1 h-1.5 rounded-full bg-slate-800 ${
-                            i <= strengthLevel
-                              ? strengthLabel === "Strong"
-                                ? "bg-emerald-400"
-                                : strengthLabel === "Medium"
-                                ? "bg-amber-400"
-                                : "bg-rose-400"
-                              : ""
-                          }`}
-                        />
-                      ))}
+                    {highlights.map((item) => (
+                      <div key={item} className="flex gap-3 text-sm text-slate-200">
+                        <div className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                        <p>{item}</p>
+                      </div>
+                    ))}
+                    <div className="mt-4 flex items-center gap-2 text-xs text-slate-400">
+                      <Globe className="w-4 h-4" />
+                      Multi-lingual proof of concept shipping in Sprint 04
                     </div>
                   </div>
-                )}
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-300 uppercase tracking-wide flex justify-between">
-                  <span>Role (optional override)</span>
-                  <span className="text-[10px] text-slate-500">
-                    Auto-detected from ID prefix when set to Auto
-                  </span>
-                </label>
-                <select
-                  value={manualRole}
-                  onChange={(e) => setManualRole(e.target.value)}
-                  className="w-full rounded-lg bg-slate-900 border border-slate-800 px-3 py-2 text-sm text-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors"
-                >
-                  <option value="auto">Auto detect from User ID</option>
-                  <option value="student">Student</option>
-                  <option value="centre_staff">Centre / Institute Staff</option>
-                  <option value="security">Security Staff</option>
-                  <option value="admin">Higher Authority</option>
-                </select>
-              </div>
-
-              <div className="flex items-center justify-between text-[11px] text-slate-400">
-                <label className="inline-flex items-center gap-2 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="h-3.5 w-3.5 rounded border border-slate-700 bg-slate-900 text-sky-500 focus:ring-sky-500"
-                  />
-                  <span>Remember me on this device</span>
-                </label>
-                <button
-                  type="button"
-                  className="text-sky-400 hover:text-sky-300 transition-colors"
-                  onClick={() => {
-                    // Placeholder for future password reset flow
-                    setError("Password reset is not wired for this demo.");
-                  }}
-                >
-                  Forgot password?
-                </button>
-              </div>
-
-              {error && (
-                <div className="text-xs text-rose-300 bg-rose-950/40 border border-rose-500/40 rounded-lg px-3 py-2 shadow-glow-danger">
-                  {error}
                 </div>
-              )}
+              </div>
+            </section>
 
-              <CyberButton
-                type="submit"
-                className="w-full mt-1"
-                leftIcon={UserCircle2}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Signing in..." : "Sign in to Dashboard"}
-              </CyberButton>
-            </form>
+            <section className="relative">
+              <div className="absolute -inset-1 rounded-[28px] bg-gradient-to-br from-primary-500/40 via-sky-500/20 to-transparent blur-2xl opacity-70" />
+              <div className="relative rounded-[26px] border border-white/15 bg-[#050914]/90 backdrop-blur-xl shadow-[0px_20px_80px_rgba(2,12,27,0.65)] p-6 md:p-8 space-y-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-[12px] uppercase tracking-[0.3em] text-slate-500">
+                      Access the prototype
+                    </p>
+                    <h2 className="text-xl font-semibold text-white">Unified Login Console</h2>
+                    <p className="text-xs text-slate-400 mt-1">
+                      Use IDs like <span className="font-mono text-primary-200">STU123</span> or override role manually.
+                    </p>
+                  </div>
+                  <div className="hidden sm:flex w-12 h-12 rounded-2xl border border-primary-500/50 bg-primary-500/10 text-primary-200 items-center justify-center">
+                    <UserCircle2 className="w-5 h-5" />
+                  </div>
+                </div>
 
-            <p className="mt-4 text-[11px] text-slate-400">
-              This is a frontend-only prototype using mock data. Actions like
-              Suspend, Verify, etc. update local state only to demonstrate flows.
-            </p>
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-slate-300 uppercase tracking-wide">
+                      User ID
+                    </label>
+                    <input
+                      type="text"
+                      value={userId}
+                      onChange={(e) => setUserId(e.target.value)}
+                      placeholder="e.g., STU2025A001 / CEN-MH-23"
+                      className="w-full rounded-xl bg-slate-950/70 border border-white/10 px-3 py-3 text-sm text-slate-50 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-semibold text-slate-300 uppercase tracking-wide">
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="••••••••"
+                        className="w-full rounded-xl bg-slate-950/70 border border-white/10 px-3 py-3 text-sm text-slate-50 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all"
+                      />
+                    </div>
+                    {strengthLabel && (
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between text-[10px] text-slate-400">
+                          <span>Password strength</span>
+                          <span
+                            className={
+                              strengthLabel === "Strong"
+                                ? "text-emerald-300"
+                                : strengthLabel === "Medium"
+                                ? "text-amber-300"
+                                : "text-rose-300"
+                            }
+                          >
+                            {strengthLabel}
+                          </span>
+                        </div>
+                        <div className="flex gap-1">
+                          {[1, 2, 3].map((i) => (
+                            <div
+                              key={i}
+                              className={`flex-1 h-1.5 rounded-full bg-slate-800 ${
+                                i <= strengthLevel
+                                  ? strengthLabel === "Strong"
+                                    ? "bg-emerald-400"
+                                    : strengthLabel === "Medium"
+                                    ? "bg-amber-400"
+                                    : "bg-rose-400"
+                                  : ""
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-semibold text-slate-300 uppercase tracking-wide flex justify-between">
+                      <span>Role (optional override)</span>
+                      <span className="text-[10px] text-slate-500">
+                        Auto-detected from ID prefix when set to Auto
+                      </span>
+                    </label>
+                    <select
+                      value={manualRole}
+                      onChange={(e) => setManualRole(e.target.value)}
+                      className="w-full rounded-xl bg-slate-950/70 border border-white/10 px-3 py-3 text-sm text-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all"
+                    >
+                      <option value="auto">Auto detect from User ID</option>
+                      <option value="student">Student</option>
+                      <option value="centre_staff">Centre / Institute Staff</option>
+                      <option value="security">Security Staff</option>
+                      <option value="admin">Higher Authority</option>
+                    </select>
+                  </div>
+
+                  <div className="flex items-center justify-between text-[11px] text-slate-400">
+                    <label className="inline-flex items-center gap-2 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={rememberMe}
+                        onChange={(e) => setRememberMe(e.target.checked)}
+                        className="h-3.5 w-3.5 rounded border border-slate-700 bg-slate-900 text-sky-500 focus:ring-sky-500"
+                      />
+                      <span>Remember me on this device</span>
+                    </label>
+                    <button
+                      type="button"
+                      className="text-sky-400 hover:text-sky-300 transition-colors"
+                      onClick={() => {
+                        setError("Password reset is not wired for this demo.");
+                      }}
+                    >
+                      Forgot password?
+                    </button>
+                  </div>
+
+                  {error && (
+                    <div className="text-xs text-rose-300 bg-rose-950/40 border border-rose-500/40 rounded-lg px-3 py-2 shadow-glow-danger">
+                      {error}
+                    </div>
+                  )}
+
+                  <CyberButton
+                    type="submit"
+                    className="w-full mt-1"
+                    leftIcon={UserCircle2}
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Signing in..." : "Sign in to Dashboard"}
+                  </CyberButton>
+                </form>
+
+                <div className="pt-4 border-t border-white/10 text-[11px] text-slate-400 flex flex-col gap-2">
+                  <p>
+                    Frontend-only prototype. Actions like suspend/verify update local state to illustrate end-to-end flows.
+                  </p>
+                  <div className="flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.4em] text-slate-500">
+                    <span>PCI-Lite Mock</span>
+                    <span>Audit Trail Ready</span>
+                    <span>Biometric Pilot</span>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
         </div>
       </div>

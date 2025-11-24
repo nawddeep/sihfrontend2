@@ -11,6 +11,12 @@ import {
   AlertTriangle,
   CheckCircle2,
   Eye,
+  Sparkles,
+  CalendarDays,
+  Activity,
+  ClipboardList,
+  BellRing,
+  Radar,
 } from "lucide-react";
 import FaceMatchVisualization from "../components/FaceMatchVisualization";
 import DocumentComparisonTool from "../components/DocumentComparisonTool";
@@ -40,31 +46,146 @@ export default function CentreStaffDashboard() {
 
   const [selectedSuspect, setSelectedSuspect] = useState(null);
 
+  const heroStats = [
+    {
+      label: "Attendance locked",
+      value: `${presentPct.toFixed(1)}%`,
+      detail: `${centreSummary.present}/${centreSummary.totalStudents} scanned`,
+      accent: "from-emerald-400/90 to-sky-400/70",
+      icon: UserCheck,
+    },
+    {
+      label: "Security score",
+      value: `${securityScore}/100`,
+      detail: "Devices, CCTV, biometrics",
+      accent: "from-sky-400/80 to-indigo-400/60",
+      icon: ShieldCheck,
+    },
+    {
+      label: "Alerts under review",
+      value: centreSummary.fraudIncidents,
+      detail: "Fraud / impersonation",
+      accent: "from-rose-400/80 to-amber-400/70",
+      icon: AlertTriangle,
+    },
+  ];
+
+  const nextSlotWindow = "Slot 02 · 10:30 IST";
+
+  const opsSignals = [
+    {
+      icon: CalendarDays,
+      text: "Hall sequencing auto-synced for afternoon shift",
+      tone: "text-sky-300",
+    },
+    {
+      icon: BellRing,
+      text: `${centreSummary.fraudIncidents} escalations awaiting manual acknowledgement`,
+      tone: "text-rose-200",
+    },
+    {
+      icon: ClipboardList,
+      text: "Bulk verification run queued for 480 admit cards",
+      tone: "text-emerald-200",
+    },
+  ];
+
+  const navItems = [
+    { id: "overview", label: "Ops Pulse", helper: "Primary stats" },
+    { id: "students", label: "Student Mgmt", helper: "Roster & controls" },
+    { id: "biometrics", label: "Biometrics", helper: "Match history" },
+    { id: "bulk", label: "Bulk Verify", helper: "CSV/ZIP uploads" },
+    { id: "fraud", label: "Fraud Desk", helper: "Photo review" },
+    { id: "reports", label: "Reports", helper: "Mock exports" },
+  ];
+
   return (
-    <div className="px-4 md:px-6 py-5 space-y-6">
-      {/* Local navigation for the Centre Staff workspace */}
-      <div className="border-b border-slate-800 mb-2 flex flex-wrap gap-2 text-xs">
-        {[
-          { id: "overview", label: "Dashboard Overview" },
-          { id: "students", label: "Student Management" },
-          { id: "biometrics", label: "Biometric Verification" },
-          { id: "bulk", label: "Bulk Verification" },
-          { id: "fraud", label: "Fraud Detection" },
-          { id: "reports", label: "Reports" },
-        ].map((item) => (
-          <button
-            key={item.id}
-            onClick={() => setActiveSection(item.id)}
-            className={`px-3 py-1.5 rounded-full border text-[11px] transition-colors ${
-              activeSection === item.id
-                ? "bg-sky-500/10 border-sky-500 text-sky-300"
-                : "bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-600"
-            }`}
-          >
-            {item.label}
-          </button>
-        ))}
-      </div>
+    <div className="relative min-h-full pb-16">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(14,165,233,0.15),transparent_60%),radial-gradient(circle_at_bottom,_rgba(248,113,113,0.12),transparent_45%)]" />
+      <div className="relative px-4 md:px-6 py-6 space-y-6">
+        <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950/95 via-slate-950 to-slate-950/90 px-5 py-6 md:px-8 md:py-8 text-slate-50 shadow-[0_25px_80px_rgba(2,6,23,0.6)] fade-up-soft">
+          <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.35),transparent_55%),radial-gradient(circle_at_bottom,_rgba(244,114,182,0.25),transparent_50%)]" />
+          <div className="relative z-10 flex flex-col gap-6">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              <div className="space-y-3">
+                <div className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 border border-white/10 text-[11px] uppercase tracking-[0.25em] text-primary-100">
+                  <Sparkles className="w-4 h-4 text-amber-300" />
+                  Centre Command Console
+                </div>
+                <div>
+                  <h1 className="text-2xl md:text-3xl font-semibold text-white">
+                    {centreSummary.name}
+                  </h1>
+                  <p className="text-sm text-slate-300">
+                    Centre ID <span className="font-mono">{centreSummary.centreId}</span>
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col items-start lg:items-end gap-3 text-xs text-slate-300">
+                <div className="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 border border-emerald-500/40 px-3 py-1 text-emerald-200">
+                  <Activity className="w-4 h-4" />
+                  Live slot monitored
+                </div>
+                <div className="flex items-center gap-2 text-slate-300">
+                  <CalendarDays className="w-4 h-4 text-sky-300" />
+                  Next compliance sweep: {nextSlotWindow}
+                </div>
+                <div className="flex items-center gap-2 text-slate-400">
+                  <Radar className="w-4 h-4 text-emerald-200" />
+                  Devices synced 2 mins ago
+                </div>
+              </div>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {heroStats.map((stat, idx) => {
+                const Icon = stat.icon;
+                return (
+                  <div
+                    key={stat.label}
+                    className={`rounded-2xl border border-white/10 bg-white/5 px-4 py-4 flex flex-col gap-2 fade-up-soft fade-delay-${idx + 1}`}
+                  >
+                    <div className="flex items-center justify-between text-[11px] uppercase tracking-wide text-slate-300">
+                      <span>{stat.label}</span>
+                      <Icon className="w-4 h-4 text-white/70" />
+                    </div>
+                    <div className="text-2xl font-semibold text-white">{stat.value}</div>
+                    <div className="text-[11px] text-slate-400">{stat.detail}</div>
+                    <div className={`h-1.5 w-16 rounded-full bg-gradient-to-r ${stat.accent}`} />
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex flex-wrap gap-2 text-[11px] text-slate-200 fade-up-soft fade-delay-3">
+              {opsSignals.map(({ icon: Icon, text, tone }) => (
+                <span
+                  key={text}
+                  className={`inline-flex items-center gap-1 rounded-full bg-white/5 px-3 py-1 border border-white/10 ${tone}`}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  {text}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <div className="rounded-2xl bg-slate-950/80 border border-slate-800/80 p-2 flex flex-wrap gap-2 text-xs fade-up-soft fade-delay-4">
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => setActiveSection(item.id)}
+              className={`flex-1 min-w-[130px] rounded-xl px-3 py-2 text-left transition-all ${
+                activeSection === item.id
+                  ? "bg-sky-500/10 border border-sky-500/50 text-sky-100 shadow-[0_0_25px_rgba(56,189,248,0.25)]"
+                  : "border border-transparent text-slate-400 hover:border-slate-700 hover:text-slate-200"
+              }`}
+            >
+              <div className="text-[11px] font-semibold">{item.label}</div>
+              <div className="text-[10px] text-slate-500">{item.helper}</div>
+            </button>
+          ))}
+        </div>
 
       {/* Overview */}
       {activeSection === "overview" && (
@@ -430,6 +551,7 @@ export default function CentreStaffDashboard() {
           </div>
         </section>
       )}
+      </div>
     </div>
   );
 }

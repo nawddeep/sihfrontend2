@@ -10,6 +10,11 @@ import {
   LineChart,
   Ban,
   ShieldOff,
+  Sparkles,
+  ShieldCheck,
+  Radar,
+  Activity,
+  BellRing,
 } from "lucide-react";
 import AdvancedAnalytics from "../components/AdvancedAnalytics";
 import ReportGenerator from "../components/ReportGenerator";
@@ -48,9 +53,123 @@ export default function AuthorityDashboard() {
     ? cases.filter((c) => c.stateCode === selectedState)
     : cases;
 
+  const verifiedCountEstimate = Math.round(
+    (authorityOverview.authenticPercentage / 100) * totalCandidates
+  );
+
+  const heroStats = [
+    {
+      label: "National exams live",
+      value: activeExams,
+      detail: "Concurrent sessions across networks",
+      accent: "from-sky-400/90 to-indigo-400/70",
+      icon: Globe2,
+    },
+    {
+      label: "Verified candidates",
+      value: verifiedCountEstimate.toLocaleString(),
+      detail: "Cleared biometric + document stack",
+      accent: "from-emerald-400/80 to-teal-400/60",
+      icon: ShieldCheck,
+    },
+    {
+      label: "Integrity pass rate",
+      value: `${authorityOverview.authenticPercentage}%`,
+      detail: "AI adjudicated authenticity ratio",
+      accent: "from-amber-400/80 to-rose-400/50",
+      icon: BarChart3,
+    },
+  ];
+
+  const authoritySignals = [
+    {
+      icon: BellRing,
+      tone: "text-rose-200",
+      text: `${flaggedCandidates} high-risk candidates awaiting final orders`,
+    },
+    {
+      icon: Radar,
+      tone: "text-sky-200",
+      text: `${centresOnline} centres streaming biometric logs live`,
+    },
+    {
+      icon: Activity,
+      tone: "text-emerald-200",
+      text: "Predictive analytics scanning for emerging fraud rings",
+    },
+  ];
+
   return (
-    <div className="px-4 md:px-6 py-5 space-y-6">
-      <section className="grid xl:grid-cols-[1.4fr,1.6fr] gap-4 md:gap-6">
+    <div className="relative min-h-full pb-16">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.18),transparent_60%),radial-gradient(circle_at_bottom,_rgba(244,114,182,0.12),transparent_45%)]" />
+      <div className="relative px-4 md:px-6 py-6 space-y-6">
+        <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950/95 via-slate-950 to-slate-950/90 px-5 py-6 md:px-8 md:py-8 text-slate-50 shadow-[0_25px_80px_rgba(2,6,23,0.6)] fade-up-soft">
+          <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_top,_rgba(99,102,241,0.35),transparent_55%),radial-gradient(circle_at_bottom,_rgba(16,185,129,0.25),transparent_50%)]" />
+          <div className="relative z-10 flex flex-col gap-6">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              <div className="space-y-3">
+                <div className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 border border-white/10 text-[11px] uppercase tracking-[0.25em] text-primary-50">
+                  <Sparkles className="w-4 h-4 text-amber-300" />
+                  National Command Oversight
+                </div>
+                <div>
+                  <h1 className="text-2xl md:text-3xl font-semibold text-white">
+                    Higher Authority Intelligence Console
+                  </h1>
+                  <p className="text-sm text-slate-300">
+                    Real-time macro view across exams, centres, fraud pipelines and predictive AI.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col items-start lg:items-end gap-3 text-xs text-slate-300">
+                <div className="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 border border-emerald-500/40 px-3 py-1 text-emerald-200">
+                  <ShieldCheck className="w-4 h-4" />
+                  Compliance seal active
+                </div>
+                <div className="flex items-center gap-2 text-slate-300">
+                  <Radar className="w-4 h-4 text-sky-300" />
+                  {centresOnline} centres streaming telemetry
+                </div>
+                <div className="flex items-center gap-2 text-slate-400">
+                  <BellRing className="w-4 h-4 text-rose-200" />
+                  {flaggedCandidates} escalations in review queue
+                </div>
+              </div>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {heroStats.map((stat, idx) => {
+                const Icon = stat.icon;
+                return (
+                  <div
+                    key={stat.label}
+                    className={`rounded-2xl border border-white/10 bg-white/5 px-4 py-4 flex flex-col gap-2 fade-up-soft fade-delay-${idx + 1}`}
+                  >
+                    <div className="flex items-center justify-between text-[11px] uppercase tracking-wide text-slate-300">
+                      <span>{stat.label}</span>
+                      <Icon className="w-4 h-4 text-white/70" />
+                    </div>
+                    <div className="text-2xl font-semibold text-white">{stat.value}</div>
+                    <div className="text-[11px] text-slate-400">{stat.detail}</div>
+                    <div className={`h-1.5 w-16 rounded-full bg-gradient-to-r ${stat.accent}`} />
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex flex-wrap gap-2 text-[11px] text-slate-200 fade-up-soft fade-delay-3">
+              {authoritySignals.map(({ icon: Icon, tone, text }) => (
+                <span
+                  key={text}
+                  className={`inline-flex items-center gap-1 rounded-full bg-white/5 px-3 py-1 border border-white/10 ${tone}`}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  {text}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="grid xl:grid-cols-[1.4fr,1.6fr] gap-4 md:gap-6">
         <div className="space-y-4">
           <div className="rounded-2xl bg-slate-950/80 border border-slate-800/80 p-4 md:p-5">
             <div className="flex items-center justify-between mb-3">
@@ -418,7 +537,8 @@ export default function AuthorityDashboard() {
           </div>
         </div>
         <AdvancedAnalytics />
-      </section>
+        </section>
+      </div>
     </div>
   );
 }

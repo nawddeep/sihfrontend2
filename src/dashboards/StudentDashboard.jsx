@@ -7,6 +7,12 @@ import {
   AlertTriangle,
   UploadCloud,
   Plus,
+  Sparkles,
+  ShieldCheck,
+  QrCode,
+  CalendarDays,
+  TrendingUp,
+  Activity,
 } from "lucide-react";
 import BlockchainVerification from "../components/BlockchainVerification";
 import SecureQRCredential from "../components/SecureQRCredential";
@@ -65,6 +71,60 @@ export default function StudentDashboard() {
 
   const [selectedDoc, setSelectedDoc] = useState(null);
 
+  const quickStats = [
+    {
+      label: "Verified documents",
+      value: `${verifiedCount}/${docs.length}`,
+      meta: "Auto-cleared via DigiVault",
+      accent: "from-emerald-400/90 to-sky-400/70",
+      icon: CheckCircle2,
+    },
+    {
+      label: "Items flagged",
+      value: fakeCount,
+      meta: "Require manual review",
+      accent: "from-rose-400/80 to-amber-400/70",
+      icon: AlertTriangle,
+    },
+    {
+      label: "QR pass ready",
+      value: "Instant",
+      meta: "Share-proof via Secure QR",
+      accent: "from-sky-400/80 to-indigo-400/60",
+      icon: QrCode,
+    },
+  ];
+
+  const nextAuditWindow = "Dec 02, 2025";
+
+  const tabConfig = [
+    { id: "overview", label: "Overview", helper: "Trust pulse" },
+    { id: "documents", label: "My Documents", helper: "Search & filter" },
+    { id: "status", label: "Verification Status", helper: "Timeline view" },
+    { id: "upload", label: "Upload", helper: "New checks" },
+  ];
+
+  const overviewHighlights = [
+    {
+      title: "Exam slot unlocked",
+      detail: "Admit-card QR ready for invigilators",
+      icon: CalendarDays,
+      tone: "text-emerald-300",
+    },
+    {
+      title: "Cross-check streak",
+      detail: "12 verifications without manual escalation",
+      icon: TrendingUp,
+      tone: "text-sky-300",
+    },
+    {
+      title: "Secure QR shared",
+      detail: "4 recruiters accessed tamper-proof copy",
+      icon: QrCode,
+      tone: "text-amber-300",
+    },
+  ];
+
   const filteredDocs = docs.filter((d) => {
     const matchSearch =
       !searchTerm ||
@@ -82,28 +142,98 @@ export default function StudentDashboard() {
   });
 
   return (
-    <div className="relative px-4 md:px-6 py-5 space-y-6">
-      {/* Tabs */}
-      <div className="border-b border-slate-800 mb-2 flex flex-wrap gap-2 text-xs">
-        {[
-          { id: "overview", label: "Overview" },
-          { id: "documents", label: "My Documents" },
-          { id: "status", label: "Verification Status" },
-          { id: "upload", label: "Upload" },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`px-3 py-1.5 rounded-full border text-[11px] transition-colors ${
-              activeTab === tab.id
-                ? "bg-sky-500/10 border-sky-500 text-sky-300"
-                : "bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-600"
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
+    <div className="relative min-h-full pb-16">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.18),transparent_60%),radial-gradient(circle_at_bottom,_rgba(248,113,113,0.12),transparent_45%)]" />
+      <div className="relative px-4 md:px-6 py-6 space-y-6">
+        <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950/95 via-slate-950 to-slate-950/90 px-5 py-6 md:px-8 md:py-8 text-slate-50 shadow-[0_25px_80px_rgba(2,6,23,0.6)] fade-up-soft">
+          <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.35),transparent_55%),radial-gradient(circle_at_bottom,_rgba(14,165,233,0.3),transparent_50%)]" />
+          <div className="relative z-10 flex flex-col gap-6">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              <div className="space-y-3">
+                <div className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 border border-white/10 text-[11px] uppercase tracking-[0.25em] text-primary-100">
+                  <Sparkles className="w-4 h-4 text-amber-300" />
+                  Student Trust Console
+                </div>
+                <div>
+                  <h1 className="text-2xl md:text-3xl font-semibold text-white">
+                    {studentRecord.name}
+                  </h1>
+                  <p className="text-sm text-slate-300">
+                    {studentRecord.programme} • {studentRecord.institution}
+                  </p>
+                  <p className="text-xs text-slate-400 font-mono">
+                    ID {studentRecord.id} • Cohort {studentRecord.year}
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col items-start lg:items-end gap-3 text-xs text-slate-300">
+                <div className="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 border border-emerald-500/40 px-3 py-1 text-emerald-200">
+                  <ShieldCheck className="w-4 h-4" />
+                  Identity verified end-to-end
+                </div>
+                <div className="flex items-center gap-2 text-slate-300">
+                  <CalendarDays className="w-4 h-4 text-sky-300" />
+                  Next audit window: {nextAuditWindow}
+                </div>
+                <div className="flex items-center gap-2 text-slate-400">
+                  <Activity className="w-4 h-4 text-sky-200" />
+                  Live mock session · synced 2 mins ago
+                </div>
+              </div>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-3">
+              {quickStats.map((stat, idx) => {
+                const Icon = stat.icon;
+                return (
+                  <div
+                    key={stat.label}
+                    className={`rounded-2xl border border-white/10 bg-white/5 px-4 py-4 flex flex-col gap-2 fade-up-soft fade-delay-${idx + 1}`}
+                  >
+                    <div className="flex items-center justify-between text-[11px] uppercase tracking-wide text-slate-300">
+                      <span>{stat.label}</span>
+                      <Icon className="w-4 h-4 text-white/70" />
+                    </div>
+                    <div className="text-2xl font-semibold text-white">
+                      {stat.value}
+                    </div>
+                    <div className="text-[11px] text-slate-400">{stat.meta}</div>
+                    <div
+                      className={`h-1.5 w-16 rounded-full bg-gradient-to-r ${stat.accent}`}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex flex-wrap gap-2 text-[11px] text-slate-300">
+              <span className="inline-flex items-center gap-1 rounded-full bg-white/5 px-3 py-1 border border-white/10">
+                <TrendingUp className="w-3.5 h-3.5 text-emerald-300" />
+                SGPA high watermark maintained
+              </span>
+              <span className="inline-flex items-center gap-1 rounded-full bg-white/5 px-3 py-1 border border-white/10">
+                <QrCode className="w-3.5 h-3.5 text-sky-300" />
+                QR proofs ready for recruiters
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <div className="rounded-2xl bg-slate-950/80 border border-slate-800/80 p-2 flex flex-wrap gap-2 text-xs fade-up-soft fade-delay-3">
+          {tabConfig.map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex-1 min-w-[130px] rounded-xl px-3 py-2 text-left transition-all ${
+                activeTab === tab.id
+                  ? "bg-sky-500/10 border border-sky-500/50 text-sky-100 shadow-[0_0_25px_rgba(56,189,248,0.25)]"
+                  : "border border-transparent text-slate-400 hover:border-slate-700 hover:text-slate-200"
+              }`}
+            >
+              <div className="text-[11px] font-semibold">{tab.label}</div>
+              <div className="text-[10px] text-slate-500">{tab.helper}</div>
+            </button>
+          ))}
+        </div>
 
       {/* Overview Tab */}
       {activeTab === "overview" && (
@@ -188,6 +318,20 @@ export default function StudentDashboard() {
               </div>
             </div>
           </section>
+          <div className="grid md:grid-cols-3 gap-3">
+            {overviewHighlights.map(({ title, detail, icon: Icon, tone }) => (
+              <div
+                key={title}
+                className="rounded-2xl border border-slate-800/70 bg-slate-950/70 p-4 flex flex-col gap-1.5"
+              >
+                <div className={`flex items-center gap-2 text-xs font-semibold ${tone}`}>
+                  <Icon className="w-4 h-4" />
+                  {title}
+                </div>
+                <p className="text-[11px] text-slate-400">{detail}</p>
+              </div>
+            ))}
+          </div>
         </>
       )}
 
@@ -611,6 +755,7 @@ export default function StudentDashboard() {
       >
         <Plus className="w-4 h-4" />
       </button>
+    </div>
     </div>
   );
 }
