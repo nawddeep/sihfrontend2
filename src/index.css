@@ -1,0 +1,190 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+  --ui-glow: rgba(0,163,255,0.12);
+  --accent-glow: rgba(255,26,198,0.10);
+}
+
+body {
+  /* vivid gradient with neon grid (explicit CSS because custom bg utility cannot be used with @apply) */
+  color: #eef2f7; /* fall back readable text */
+  background-image: linear-gradient(135deg, rgba(2,6,23,1) 0%, rgba(4,12,30,0.9) 30%, rgba(0,163,255,0.06) 60%, rgba(255,26,198,0.03) 100%),
+    url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300a3ff' fill-opacity='0.06'%3E%3Cpath d='M48 48v-6h-3v6h-6v3h6v6h3v-6h6v-3h-6zm0-42V0h-3v6h-6v3h6v6h3V9h6V6h-6zM6 48v-6H3v6H0v3h3v6h3v-6h6v-3H6zM6 6V0H3v6H0v3h3v6h3V9h6V6H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-size: cover, 1200px 1200px;
+  background-repeat: no-repeat, repeat;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateY(-16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.6);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.glass-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 8px 30px var(--ui-glow);
+}
+
+/* Camera status indicators for Security dashboard */
+@keyframes pulse-online {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 0.4;
+  }
+}
+
+@keyframes blink-offline {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.status-dot-online {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 9999px;
+  background-color: #22c55e;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.8);
+  animation: pulse-online 1.6s ease-in-out infinite;
+}
+
+.status-dot-degraded {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 9999px;
+  background-color: #facc15;
+  box-shadow: 0 0 10px rgba(250, 204, 21, 0.7);
+  animation: pulse-online 1.8s ease-in-out infinite;
+}
+
+.status-dot-offline {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 9999px;
+  background-color: #ef4444;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
+  animation: blink-offline 1.2s steps(2, start) infinite;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out;
+}
+
+@keyframes fade-up-soft {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-4px) scale(1.008);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes glow-ambient {
+  0% {
+    opacity: 0.45;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0.45;
+    transform: scale(0.98);
+  }
+}
+
+@keyframes float-loop {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.fade-up-soft {
+  opacity: 0;
+  animation: fade-up-soft 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.glow-ambient {
+  animation: glow-ambient 9s ease-in-out infinite;
+}
+
+.float-loop {
+  animation: float-loop 12s ease-in-out infinite;
+}
+
+.fade-delay-1 {
+  animation-delay: 0.08s;
+}
+.fade-delay-2 {
+  animation-delay: 0.16s;
+}
+.fade-delay-3 {
+  animation-delay: 0.24s;
+}
+.fade-delay-4 {
+  animation-delay: 0.32s;
+}
+.fade-delay-5 {
+  animation-delay: 0.4s;
+}
