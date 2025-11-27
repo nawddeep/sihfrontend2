@@ -644,47 +644,6 @@ export default function StudentDashboard() {
         </section>
       )}
 
-      {/* Quick actions & comparison remain accessible below all tabs */}
-      <section className="grid lg:grid-cols-3 gap-4 md:gap-6">
-        <div className="lg:col-span-1 rounded-lg bg-white border border-govGray-300 p-4 md:p-5 gov-card">
-          <BlockchainVerification
-            documentId={selectedDoc?.id || docs[0]?.id}
-            onVerify={(result) => {
-              console.log("Blockchain verification:", result);
-            }}
-          />
-        </div>
-
-        <div className="lg:col-span-1 rounded-lg bg-white border border-govGray-300 p-4 md:p-5 gov-card">
-          <SecureQRCredential
-            studentId={studentRecord.id}
-            documentId={selectedDoc?.id || docs[0]?.id}
-            documentName={selectedDoc?.name || docs[0]?.name}
-          />
-        </div>
-
-        <div className="lg:col-span-1 rounded-lg bg-white border border-govGray-300 p-4 md:p-5 gov-card">
-          <div className="text-xs font-semibold text-govNavy-700 uppercase tracking-wide mb-3">
-            Quick Actions
-          </div>
-          <div className="space-y-2 text-xs">
-            <button
-              onClick={() =>
-                setSelectedDoc(
-                  docs.find((d) => d.status === "Verified") || docs[0]
-                )
-              }
-              className="w-full text-left btn-gov-secondary"
-            >
-              <div className="font-medium">Select Verified Document</div>
-              <div className="text-[10px] mt-0.5">
-                Choose a document to drive blockchain & QR views.
-              </div>
-            </button>
-          </div>
-        </div>
-      </section>
-
       {selectedDoc && (
         <section className="rounded-lg bg-white border border-govGray-300 p-4 md:p-5 gov-card">
           <DocumentComparisonTool
