@@ -17,6 +17,7 @@ import {
 import BlockchainVerification from "../components/BlockchainVerification";
 import SecureQRCredential from "../components/SecureQRCredential";
 import DocumentComparisonTool from "../components/DocumentComparisonTool";
+import { AIFraudDetector } from "../components/AIFraudDetection";
 
 const statusColor = (status) => {
   if (status === "Verified") return "text-govGreen-700 bg-govGreen-50 border border-govGreen-200";
@@ -611,6 +612,32 @@ export default function StudentDashboard() {
           </div>
 
           <div className="space-y-4">
+            {/* AI Fraud Detection Section */}
+            <div className="rounded-lg bg-white border border-govGray-300 p-4 md:p-5 gov-card">
+              <div className="mb-4">
+                <div className="text-xs font-semibold text-govNavy-700 uppercase tracking-wide">
+                  AI-Powered Fraud Detection
+                </div>
+                <p className="text-[11px] text-govGray-600 mt-1">
+                  Advanced machine learning analysis for document authenticity verification
+                </p>
+              </div>
+              <AIFraudDetector
+                documentId={selectedDoc?.id || uploadQueue[0]?.id || docs[0]?.id}
+                documentData={{
+                  name: selectedDoc?.name || uploadQueue[0]?.name || docs[0]?.name,
+                  type: selectedDoc?.type || "Uploaded Document",
+                  uploadedAt: new Date().toISOString(),
+                }}
+                onDetectionComplete={(result) => {
+                  console.log("AI Detection completed:", result);
+                }}
+                onAnomalyClick={(anomaly) => {
+                  console.log("Anomaly selected:", anomaly);
+                }}
+              />
+            </div>
+
             <div className="rounded-lg bg-white border border-govGray-300 p-4 md:p-5 gov-card">
               <div className="flex items-center justify-between mb-2">
                 <div>
