@@ -129,19 +129,17 @@ function LoginPage({ onLogin }) {
 
   return (
     <CyberLayout>
-      <div className="relative min-h-screen overflow-hidden bg-[#02040a] text-slate-100">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(27,82,255,0.25),transparent_55%),radial-gradient(circle_at_bottom,_rgba(12,228,201,0.18),transparent_45%)]" />
-        <div className="absolute inset-0 opacity-30 mix-blend-screen">
-          <div className="h-full w-full bg-[linear-gradient(130deg,rgba(10,10,18,0.9),transparent_45%),linear-gradient(310deg,rgba(14,26,44,0.9),transparent_35%)]" />
-        </div>
-
+      <div className="relative min-h-screen overflow-hidden bg-govGray-100 text-govGray-700">
+        {/* Subtle Indian flag tricolor overlay */}
+        <div className="absolute top-0 left-0 right-0 h-1" style={{background: 'linear-gradient(to right, #FF9933 0%, #FF9933 33.33%, #FFFFFF 33.33%, #FFFFFF 66.66%, #138808 66.66%, #138808 100%)'}} />
+        
         <div className="relative z-10 max-w-6xl mx-auto px-4 py-10 md:py-14">
-          <div className="flex flex-wrap items-center gap-3 text-xs text-slate-300/80 mb-6">
-            <div className="inline-flex items-center gap-2 rounded-full bg-white/5 px-3 py-1 border border-white/10 backdrop-blur">
-              <Sparkles className="w-4 h-4 text-amber-300" />
-              SIH Prototype · Winter '25 Sprint
+          <div className="flex flex-wrap items-center gap-3 text-xs text-govGray-600 mb-6">
+            <div className="inline-flex items-center gap-2 rounded-full bg-govSaffron-50 px-3 py-1 border border-govSaffron-200">
+              <Sparkles className="w-4 h-4 text-govSaffron-600" />
+              SIH Exam Security Platform · Government of India
             </div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-primary-500/10 px-3 py-1 border border-primary-500/30 text-primary-200 shadow-glow-sm">
+            <div className="inline-flex items-center gap-2 rounded-full bg-govGreen-50 px-3 py-1 border border-govGreen-200 text-govGreen-700">
               <BadgeCheck className="w-4 h-4" />
               Trusted by 30+ pilot universities
             </div>
@@ -149,15 +147,15 @@ function LoginPage({ onLogin }) {
 
           <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
             <section className="space-y-6">
-              <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md p-6 md:p-8 shadow-glow-md">
-                <div className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-primary-200 mb-3">
+              <div className="rounded-lg border-2 border-govGray-300 bg-white p-6 md:p-8 shadow-gov-md tricolor-top">
+                <div className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-govNavy-700 mb-3">
                   <Shield className="w-4 h-4" />
                   Unified Trust Portal
                 </div>
-                <h1 className="text-2xl md:text-4xl font-semibold text-white leading-tight">
+                <h1 className="text-2xl md:text-4xl font-bold text-govNavy-700 leading-tight">
                   Zero-compromise verification for results, centres & live security ops.
                 </h1>
-                <p className="mt-3 text-sm text-slate-300/90 max-w-2xl">
+                <p className="mt-3 text-sm text-govGray-600 max-w-2xl">
                   Log in once, route everywhere. The new login orchestrates dashboards for students, institutes,
                   security cells and the national command centre—while retaining audit-grade traceability.
                 </p>
@@ -166,50 +164,50 @@ function LoginPage({ onLogin }) {
                   {statTiles.map((stat) => (
                     <div
                       key={stat.label}
-                      className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/8 to-transparent p-4"
+                      className="rounded-lg border-l-4 border-l-govGreen-500 border border-govGray-200 bg-white p-4 shadow-gov-sm hover:shadow-gov-md transition-shadow"
                     >
-                      <div className="text-2xl font-semibold">{stat.value}</div>
-                      <div className="text-[11px] uppercase tracking-wider text-white/60">
+                      <div className="text-2xl font-bold text-govNavy-700">{stat.value}</div>
+                      <div className="text-[11px] uppercase tracking-wider text-govGray-600">
                         {stat.label}
                       </div>
-                      <div className="mt-1 text-[11px] text-emerald-300/80">{stat.delta}</div>
+                      <div className="mt-1 text-[11px] text-govGreen-700 font-semibold">{stat.delta}</div>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-white/10 bg-dark-950/60 backdrop-blur">
-                <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/10">
+              <div className="rounded-lg border border-govGray-300 bg-white shadow-gov-md overflow-hidden">
+                <div className="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-govGray-200">
                   <div className="p-6 space-y-4">
                     {roleInfo.map(({ label, detail, icon: Icon }) => (
                       <div
                         key={label}
-                        className="flex items-start gap-3 rounded-xl border border-white/5 bg-white/5 p-3"
+                        className="flex items-start gap-3 rounded-lg border border-govGray-200 bg-govGray-50 p-3 hover:bg-govBlue-50 transition-colors"
                       >
-                        <div className="w-9 h-9 rounded-xl bg-primary-500/10 border border-primary-500/30 flex items-center justify-center text-primary-200">
+                        <div className="w-9 h-9 rounded-lg bg-govBlue-100 border border-govBlue-300 flex items-center justify-center text-govBlue-600">
                           <Icon className="w-4 h-4" />
                         </div>
                         <div>
-                          <div className="text-sm font-semibold">{label}</div>
-                          <div className="text-[12px] text-slate-300">{detail}</div>
+                          <div className="text-sm font-semibold text-govNavy-700">{label}</div>
+                          <div className="text-[12px] text-govGray-600">{detail}</div>
                         </div>
                       </div>
                     ))}
                   </div>
                   <div className="p-6 space-y-3">
-                    <div className="flex items-center gap-2 text-[12px] uppercase tracking-[0.3em] text-slate-400">
+                    <div className="flex items-center gap-2 text-[12px] uppercase tracking-[0.3em] text-govGray-600">
                       <Fingerprint className="w-4 h-4" />
                       Why it feels different
                     </div>
                     {highlights.map((item) => (
-                      <div key={item} className="flex gap-3 text-sm text-slate-200">
-                        <div className="mt-1 h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                      <div key={item} className="flex gap-3 text-sm text-govGray-700">
+                        <div className="mt-1 h-1.5 w-1.5 rounded-full bg-govGreen-500" />
                         <p>{item}</p>
                       </div>
                     ))}
-                    <div className="mt-4 flex items-center gap-2 text-xs text-slate-400">
+                    <div className="mt-4 flex items-center gap-2 text-xs text-govGray-600">
                       <Globe className="w-4 h-4" />
-                      Multi-lingual proof of concept shipping in Sprint 04
+                      Multi-lingual support shipping in next phase
                     </div>
                   </div>
                 </div>
@@ -217,61 +215,57 @@ function LoginPage({ onLogin }) {
             </section>
 
             <section className="relative">
-              <div className="absolute -inset-1 rounded-[28px] bg-gradient-to-br from-primary-500/40 via-sky-500/20 to-transparent blur-2xl opacity-70" />
-              <div className="relative rounded-[26px] border border-white/15 bg-[#050914]/90 backdrop-blur-xl shadow-[0px_20px_80px_rgba(2,12,27,0.65)] p-6 md:p-8 space-y-6">
+              <div className="absolute -inset-1 rounded-lg bg-gradient-to-br from-govSaffron-500/20 to-govGreen-500/20 blur-lg opacity-50" />
+              <div className="relative rounded-lg border-2 border-govNavy-300 bg-white shadow-gov-lg p-6 md:p-8 space-y-6 tricolor-top">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-[12px] uppercase tracking-[0.3em] text-slate-500">
-                      Access the prototype
+                    <p className="text-[12px] uppercase tracking-[0.3em] text-govGray-600">
+                      Access the portal
                     </p>
-                    <h2 className="text-xl font-semibold text-white">Unified Login Console</h2>
-                    <p className="text-xs text-slate-400 mt-1">
-                      Use IDs like <span className="font-mono text-primary-200">STU123</span> or override role manually.
+                    <h2 className="text-xl font-bold text-govNavy-700">Unified Login Console</h2>
+                    <p className="text-xs text-govGray-600 mt-1">
+                      Use IDs like <span className="font-mono text-govBlue-600 font-semibold">STU123</span> or override role manually.
                     </p>
                   </div>
-                  <div className="hidden sm:flex w-12 h-12 rounded-2xl border border-primary-500/50 bg-primary-500/10 text-primary-200 items-center justify-center">
+                  <div className="hidden sm:flex w-12 h-12 rounded-lg border-2 border-govNavy-300 bg-govNavy-50 text-govNavy-600 items-center justify-center">
                     <UserCircle2 className="w-5 h-5" />
                   </div>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-300 uppercase tracking-wide">
-                      User ID
-                    </label>
+                    <label className="label-gov">User ID</label>
                     <input
                       type="text"
                       value={userId}
                       onChange={(e) => setUserId(e.target.value)}
                       placeholder="e.g., STU2025A001 / CEN-MH-23"
-                      className="w-full rounded-xl bg-slate-950/70 border border-white/10 px-3 py-3 text-sm text-slate-50 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all"
+                      className="input-gov"
                     />
                   </div>
 
                   <div className="space-y-2">
                     <div className="space-y-1.5">
-                      <label className="text-xs font-semibold text-slate-300 uppercase tracking-wide">
-                        Password
-                      </label>
+                      <label className="label-gov">Password</label>
                       <input
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="••••••••"
-                        className="w-full rounded-xl bg-slate-950/70 border border-white/10 px-3 py-3 text-sm text-slate-50 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all"
+                        className="input-gov"
                       />
                     </div>
                     {strengthLabel && (
                       <div className="space-y-1">
-                        <div className="flex items-center justify-between text-[10px] text-slate-400">
+                        <div className="flex items-center justify-between text-[10px] text-govGray-600">
                           <span>Password strength</span>
                           <span
                             className={
                               strengthLabel === "Strong"
-                                ? "text-emerald-300"
+                                ? "text-govGreen-600 font-semibold"
                                 : strengthLabel === "Medium"
-                                ? "text-amber-300"
-                                : "text-rose-300"
+                                ? "text-govSaffron-600 font-semibold"
+                                : "text-danger-600 font-semibold"
                             }
                           >
                             {strengthLabel}
@@ -281,14 +275,14 @@ function LoginPage({ onLogin }) {
                           {[1, 2, 3].map((i) => (
                             <div
                               key={i}
-                              className={`flex-1 h-1.5 rounded-full bg-slate-800 ${
+                              className={`flex-1 h-1.5 rounded-full transition-colors ${
                                 i <= strengthLevel
                                   ? strengthLabel === "Strong"
-                                    ? "bg-emerald-400"
+                                    ? "bg-govGreen-500"
                                     : strengthLabel === "Medium"
-                                    ? "bg-amber-400"
-                                    : "bg-rose-400"
-                                  : ""
+                                    ? "bg-govSaffron-500"
+                                    : "bg-danger-500"
+                                  : "bg-govGray-300"
                               }`}
                             />
                           ))}
@@ -298,16 +292,16 @@ function LoginPage({ onLogin }) {
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-300 uppercase tracking-wide flex justify-between">
+                    <label className="label-gov flex justify-between">
                       <span>Role (optional override)</span>
-                      <span className="text-[10px] text-slate-500">
+                      <span className="text-[10px] text-govGray-600">
                         Auto-detected from ID prefix when set to Auto
                       </span>
                     </label>
                     <select
                       value={manualRole}
                       onChange={(e) => setManualRole(e.target.value)}
-                      className="w-full rounded-xl bg-slate-950/70 border border-white/10 px-3 py-3 text-sm text-slate-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all"
+                      className="input-gov"
                     >
                       <option value="auto">Auto detect from User ID</option>
                       <option value="student">Student</option>
@@ -317,19 +311,19 @@ function LoginPage({ onLogin }) {
                     </select>
                   </div>
 
-                  <div className="flex items-center justify-between text-[11px] text-slate-400">
+                  <div className="flex items-center justify-between text-[11px] text-govGray-600">
                     <label className="inline-flex items-center gap-2 cursor-pointer select-none">
                       <input
                         type="checkbox"
                         checked={rememberMe}
                         onChange={(e) => setRememberMe(e.target.checked)}
-                        className="h-3.5 w-3.5 rounded border border-slate-700 bg-slate-900 text-sky-500 focus:ring-sky-500"
+                        className="h-3.5 w-3.5 rounded border border-govGray-300 bg-white text-govBlue-600 focus:ring-govBlue-300"
                       />
                       <span>Remember me on this device</span>
                     </label>
                     <button
                       type="button"
-                      className="text-sky-400 hover:text-sky-300 transition-colors"
+                      className="text-govBlue-600 hover:text-govBlue-700 transition-colors"
                       onClick={() => {
                         setError("Password reset is not wired for this demo.");
                       }}
@@ -339,29 +333,29 @@ function LoginPage({ onLogin }) {
                   </div>
 
                   {error && (
-                    <div className="text-xs text-rose-300 bg-rose-950/40 border border-rose-500/40 rounded-lg px-3 py-2 shadow-glow-danger">
+                    <div className="text-xs text-danger-700 bg-danger-50 border border-danger-200 rounded-lg px-3 py-2">
                       {error}
                     </div>
                   )}
 
-                  <CyberButton
+                  <button
                     type="submit"
-                    className="w-full mt-1"
-                    leftIcon={UserCircle2}
                     disabled={isSubmitting}
+                    className="btn-gov-primary w-full mt-1 flex items-center justify-center gap-2"
                   >
+                    <UserCircle2 className="w-4 h-4" />
                     {isSubmitting ? "Signing in..." : "Sign in to Dashboard"}
-                  </CyberButton>
+                  </button>
                 </form>
 
-                <div className="pt-4 border-t border-white/10 text-[11px] text-slate-400 flex flex-col gap-2">
+                <div className="pt-4 border-t border-govGray-200 text-[11px] text-govGray-600 flex flex-col gap-2">
                   <p>
                     Frontend-only prototype. Actions like suspend/verify update local state to illustrate end-to-end flows.
                   </p>
-                  <div className="flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.4em] text-slate-500">
-                    <span>PCI-Lite Mock</span>
-                    <span>Audit Trail Ready</span>
-                    <span>Biometric Pilot</span>
+                  <div className="flex flex-wrap gap-2 text-[10px] uppercase tracking-[0.4em] text-govGray-600">
+                    <span className="badge-gov-info">Audit Trail Ready</span>
+                    <span className="badge-gov-verified">Biometric Pilot</span>
+                    <span className="badge-gov-gold">Government Ready</span>
                   </div>
                 </div>
               </div>

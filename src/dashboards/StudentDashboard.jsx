@@ -19,10 +19,10 @@ import SecureQRCredential from "../components/SecureQRCredential";
 import DocumentComparisonTool from "../components/DocumentComparisonTool";
 
 const statusColor = (status) => {
-  if (status === "Verified") return "text-emerald-400 bg-emerald-500/10";
-  if (status === "Flagged as Fake") return "text-rose-400 bg-rose-500/10";
-  if (status === "Pending") return "text-amber-400 bg-amber-500/10";
-  return "text-slate-300 bg-slate-700/40";
+  if (status === "Verified") return "text-govGreen-700 bg-govGreen-50 border border-govGreen-200";
+  if (status === "Flagged as Fake") return "text-danger-700 bg-danger-50 border border-danger-200";
+  if (status === "Pending") return "text-govSaffron-700 bg-govSaffron-50 border border-govSaffron-200";
+  return "text-govGray-600 bg-govGray-100 border border-govGray-300";
 };
 
 export default function StudentDashboard() {
@@ -143,10 +143,8 @@ export default function StudentDashboard() {
 
   return (
     <div className="relative min-h-full pb-16">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.18),transparent_60%),radial-gradient(circle_at_bottom,_rgba(248,113,113,0.12),transparent_45%)]" />
       <div className="relative px-4 md:px-6 py-6 space-y-6">
-        <section className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950/95 via-slate-950 to-slate-950/90 px-5 py-6 md:px-8 md:py-8 text-slate-50 shadow-[0_25px_80px_rgba(2,6,23,0.6)] fade-up-soft">
-          <div className="absolute inset-0 opacity-60 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.35),transparent_55%),radial-gradient(circle_at_bottom,_rgba(14,165,233,0.3),transparent_50%)]" />
+        <section className="relative overflow-hidden rounded-lg border-2 border-govNavy-300 bg-white px-5 py-6 md:px-8 md:py-8 text-govGray-700 shadow-gov-lg tricolor-top fade-up-soft">
           <div className="relative z-10 flex flex-col gap-6">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               <div className="space-y-3">
