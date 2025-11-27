@@ -23,7 +23,7 @@ export default function AuthorityPortal() {
                         <Users className="w-6 h-6 text-primary-400" />
                     </div>
                     <div>
-                        <div className="text-2xl font-bold text-white">1,842</div>
+                        <div className="text-2xl font-bold text-govNavy-700">1,842</div>
                         <div className="text-xs text-dark-400">Total Present</div>
                     </div>
                 </div>
@@ -32,7 +32,7 @@ export default function AuthorityPortal() {
                         <Users className="w-6 h-6 text-danger-400" />
                     </div>
                     <div>
-                        <div className="text-2xl font-bold text-white">156</div>
+                        <div className="text-2xl font-bold text-govNavy-700">156</div>
                         <div className="text-xs text-dark-400">Total Absent</div>
                     </div>
                 </div>
@@ -41,7 +41,7 @@ export default function AuthorityPortal() {
                         <Clock className="w-6 h-6 text-warning-400" />
                     </div>
                     <div>
-                        <div className="text-2xl font-bold text-white">42</div>
+                        <div className="text-2xl font-bold text-govNavy-700">42</div>
                         <div className="text-xs text-dark-400">Late Arrivals</div>
                     </div>
                 </div>
@@ -50,7 +50,7 @@ export default function AuthorityPortal() {
                         <Server className="w-6 h-6 text-success-400" />
                     </div>
                     <div>
-                        <div className="text-2xl font-bold text-white">99.9%</div>
+                        <div className="text-2xl font-bold text-govNavy-700">99.9%</div>
                         <div className="text-xs text-dark-400">System Uptime</div>
                     </div>
                 </div>
@@ -103,7 +103,7 @@ export default function AuthorityPortal() {
                             <tbody className="divide-y divide-dark-800">
                                 {[1, 2, 3, 4, 5].map(i => (
                                     <tr key={i} className="hover:bg-dark-800/50">
-                                        <td className="px-4 py-2 text-white">STF-00{i}</td>
+                                        <td className="px-4 py-2 text-govNavy-700">STF-00{i}</td>
                                         <td className="px-4 py-2 text-primary-300">Verified Student</td>
                                         <td className="px-4 py-2 text-dark-300">STU-2025-{100 + i}</td>
                                         <td className="px-4 py-2 text-dark-400 font-mono">10:{30 + i}:00</td>
@@ -135,7 +135,7 @@ export default function AuthorityPortal() {
                         ].map((user, i) => (
                             <div key={i} className="flex items-center justify-between p-3 bg-dark-950 rounded-xl border border-dark-800">
                                 <div>
-                                    <div className="text-sm font-medium text-white">{user.name}</div>
+                                    <div className="text-sm font-medium text-govNavy-700">{user.name}</div>
                                     <div className="text-xs text-dark-400">{user.role}</div>
                                 </div>
                                 <div className="flex items-center gap-2">

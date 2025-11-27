@@ -68,7 +68,7 @@ export default function SecurityPortal() {
                                         <Clock className="w-3 h-3" /> {log.time}
                                     </span>
                                 </div>
-                                <div className="text-sm text-white mb-1">{log.user}</div>
+                                <div className="text-sm text-govNavy-700 mb-1">{log.user}</div>
                                 <div className="text-xs text-dark-400">{log.gate}</div>
                             </div>
                         </div>
@@ -98,8 +98,8 @@ export default function SecurityPortal() {
                     <button
                         onClick={() => setIsLockdown(!isLockdown)}
                         className={`w-full py-3 rounded-xl font-bold text-sm transition-all ${isLockdown
-                                ? 'bg-danger-500 text-white hover:bg-danger-600 shadow-lg shadow-danger-500/20'
-                                : 'bg-dark-800 text-dark-300 hover:bg-dark-700 hover:text-white'
+                                ? 'bg-danger-500 text-govNavy-700 hover:bg-danger-600 shadow-lg shadow-danger-500/20'
+                                : 'bg-dark-800 text-dark-300 hover:bg-dark-700 hover:text-govNavy-700'
                             }`}
                     >
                         {isLockdown ? 'DISABLE LOCKDOWN' : 'ACTIVATE LOCKDOWN'}
@@ -188,7 +188,7 @@ export default function SecurityPortal() {
                             </h3>
                             <button
                                 onClick={() => setShowIncidentForm(false)}
-                                className="text-dark-400 hover:text-white transition-colors"
+                                className="text-dark-400 hover:text-govNavy-700 transition-colors"
                             >
                                 <X className="w-5 h-5" />
                             </button>
