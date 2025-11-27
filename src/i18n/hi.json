@@ -1,0 +1,55 @@
+{
+  "common": {
+    "loading": "लोड हो रहा है",
+    "error": "त्रुटि",
+    "success": "सफल",
+    "cancel": "रद्द करें",
+    "submit": "जमा करें",
+    "export": "निर्यात",
+    "search": "खोज",
+    "filter": "फ़िल्टर",
+    "verified": "सत्यापित",
+    "failed": "विफल",
+    "pending": "लंबित"
+  },
+  "features": {
+    "aifraud": "कृत्रिम बुद्धिमत्ता धोखाधड़ी पहचान",
+    "livemonitoring": "लाइव निगरानी",
+    "biometric": "बायोमेट्रिक सत्यापन",
+    "blockchain": "ब्लॉकचेन एक्सप्लोरर",
+    "analytics": "विश्लेषण डैशबोर्ड",
+    "performance": "प्रदर्शन निगरानी",
+    "mobile": "मोबाइल अनुकूलन",
+    "accessibility": "पहुंच",
+    "multilingual": "बहुभाषी",
+    "demo": "डेमो सामग्री"
+  },
+  "dashboard": {
+    "title": "परीक्षा सुरक्षा डैशबोर्ड",
+    "welcome": "SIH परीक्षा सुरक्षा प्लेटफॉर्म में स्वागत है",
+    "uploadDocument": "दस्तावेज़ अपलोड करें",
+    "verifyIdentity": "पहचान सत्यापित करें",
+    "viewAnalytics": "विश्लेषण देखें"
+  },
+  "verification": {
+    "documentVerification": "दस्तावेज़ सत्यापन",
+    "biometricCheck": "बायोमेट्रिक जांच",
+    "faceRecognition": "चेहरे की पहचान",
+    "successRate": "सफलता दर",
+    "fraudDetected": "धोखाधड़ी का पता चला",
+    "verificationComplete": "सत्यापन पूर्ण"
+  },
+  "blockchain": {
+    "explorer": "ब्लॉकचेन एक्सप्लोरर",
+    "auditTrail": "ऑडिट ट्रेल",
+    "blockHeight": "ब्लॉक ऊंचाई",
+    "transactions": "लेनदेन",
+    "immutable": "अपरिवर्तनीय रिकॉर्ड"
+  },
+  "analytics": {
+    "totalVerifications": "कुल सत्यापन",
+    "fraudRate": "धोखाधड़ी दर",
+    "avgTime": "औसत समय",
+    "successRate": "सफलता दर"
+  }
+}

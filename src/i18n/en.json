@@ -1,0 +1,55 @@
+{
+  "common": {
+    "loading": "Loading",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "export": "Export",
+    "search": "Search",
+    "filter": "Filter",
+    "verified": "Verified",
+    "failed": "Failed",
+    "pending": "Pending"
+  },
+  "features": {
+    "aifraud": "AI Fraud Detection",
+    "livemonitoring": "Live Monitoring",
+    "biometric": "Biometric Verification",
+    "blockchain": "Blockchain Explorer",
+    "analytics": "Analytics Dashboard",
+    "performance": "Performance Monitoring",
+    "mobile": "Mobile Optimization",
+    "accessibility": "Accessibility",
+    "multilingual": "Multi-Language",
+    "demo": "Demo Materials"
+  },
+  "dashboard": {
+    "title": "Exam Security Dashboard",
+    "welcome": "Welcome to SIH Exam Security Platform",
+    "uploadDocument": "Upload Document",
+    "verifyIdentity": "Verify Identity",
+    "viewAnalytics": "View Analytics"
+  },
+  "verification": {
+    "documentVerification": "Document Verification",
+    "biometricCheck": "Biometric Check",
+    "faceRecognition": "Face Recognition",
+    "successRate": "Success Rate",
+    "fraudDetected": "Fraud Detected",
+    "verificationComplete": "Verification Complete"
+  },
+  "blockchain": {
+    "explorer": "Blockchain Explorer",
+    "auditTrail": "Audit Trail",
+    "blockHeight": "Block Height",
+    "transactions": "Transactions",
+    "immutable": "Immutable Record"
+  },
+  "analytics": {
+    "totalVerifications": "Total Verifications",
+    "fraudRate": "Fraud Rate",
+    "avgTime": "Average Time",
+    "successRate": "Success Rate"
+  }
+}

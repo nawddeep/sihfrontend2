@@ -22,7 +22,7 @@
  */
 
 import React, { useRef, useEffect, useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { AlertTriangle, Eye, EyeOff } from 'lucide-react';
 
 /**
@@ -43,15 +43,16 @@ const AnomalyVisualizer = React.memo(function AnomalyVisualizer({
   const [showHeatmap, setShowHeatmap] = useState(true);
   const [intensity, setIntensity] = useState(60);
   const [containerWidth, setContainerWidth] = useState(0);
+  const prefersReducedMotion = useReducedMotion();
 
   /**
    * Get color for anomaly based on severity
    */
   const severityColor = useMemo(() => ({
-    critical: { r: 255, g: 59, b: 48, hex: '#FF3B30' },
-    high: { r: 255, g: 149, b: 0, hex: '#FF9500' },
-    medium: { r: 255, g: 193, b: 7, hex: '#FFC107' },
-    low: { r: 33, g: 150, b: 243, hex: '#2196F3' },
+    critical: { r: 220, g: 20, b: 60, hex: '#DC143C' },
+    high: { r: 255, g: 153, b: 51, hex: '#FF9933' },
+    medium: { r: 0, g: 102, b: 204, hex: '#0066CC' },
+    low: { r: 19, g: 136, b: 8, hex: '#138808' },
   }), []);
 
   /**
@@ -165,24 +166,24 @@ const AnomalyVisualizer = React.memo(function AnomalyVisualizer({
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-            <h3 className="font-semibold text-gray-900 dark:text-white">
+            <AlertTriangle className="w-5 h-5 text-govSaffron-600 dark:text-govSaffron-300" />
+            <h3 className="font-semibold text-govNavy-700 dark:text-white">
               Anomaly Heatmap
             </h3>
           </div>
 
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={prefersReducedMotion ? undefined : { scale: 1.05 }}
+            whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
             onClick={() => setShowHeatmap(!showHeatmap)}
             className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
             aria-label={showHeatmap ? 'Hide heatmap' : 'Show heatmap'}
             aria-pressed={showHeatmap}
           >
             {showHeatmap ? (
-              <Eye className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <Eye className="w-5 h-5 text-govBlue-600 dark:text-govBlue-300" />
             ) : (
-              <EyeOff className="w-5 h-5 text-gray-400 dark:text-gray-600" />
+              <EyeOff className="w-5 h-5 text-govGray-500 dark:text-govGray-300" />
             )}
           </motion.button>
         </div>
@@ -192,13 +193,13 @@ const AnomalyVisualizer = React.memo(function AnomalyVisualizer({
           {Object.entries(severityColor).map(([severity, color]) => (
             <div
               key={severity}
-              className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded"
+              className="flex items-center gap-2 p-2 bg-govGray-50 dark:bg-govGray-700 rounded"
             >
               <div
                 className="w-3 h-3 rounded-full"
                 style={{ backgroundColor: color.hex }}
               />
-              <span className="capitalize text-gray-700 dark:text-gray-300">
+              <span className="capitalize text-govNavy-600 dark:text-govGray-100">
                 {severity}
               </span>
             </div>
@@ -207,7 +208,7 @@ const AnomalyVisualizer = React.memo(function AnomalyVisualizer({
 
         {/* Canvas Container */}
         <motion.div
-          className="relative bg-gray-100 dark:bg-gray-900 rounded-lg overflow-hidden"
+          className="relative bg-govGray-100 dark:bg-gray-900 rounded-lg overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
         >
@@ -219,7 +220,7 @@ const AnomalyVisualizer = React.memo(function AnomalyVisualizer({
           />
 
           {/* Document Preview Text */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400 dark:text-gray-600">
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none text-govGray-400 dark:text-govGray-500">
             <p className="text-sm">Document Preview Area</p>
           </div>
         </motion.div>
@@ -227,13 +228,13 @@ const AnomalyVisualizer = React.memo(function AnomalyVisualizer({
         {/* Intensity Control */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <label
-              htmlFor="heatmap-intensity"
-              className="text-sm font-medium text-gray-700 dark:text-gray-300"
+          <label
+            htmlFor="heatmap-intensity"
+            className="text-sm font-medium text-govNavy-700 dark:text-govGray-100"
             >
               Heatmap Intensity
             </label>
-            <span className="text-sm font-semibold text-gray-900 dark:text-white">
+          <span className="text-sm font-semibold text-govNavy-700 dark:text-white">
               {intensity}%
             </span>
           </div>
@@ -244,14 +245,14 @@ const AnomalyVisualizer = React.memo(function AnomalyVisualizer({
             max="100"
             value={intensity}
             onChange={(e) => setIntensity(parseInt(e.target.value))}
-            className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer accent-blue-600"
+            className="w-full h-2 bg-govGray-200 dark:bg-govGray-700 rounded-lg appearance-none cursor-pointer accent-govBlue-600"
             aria-label="Adjust heatmap intensity"
           />
         </div>
 
         {/* Anomalies List */}
         <div className="space-y-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-          <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+          <h4 className="text-sm font-semibold text-govNavy-700 dark:text-white">
             Detected Issues
           </h4>
 
@@ -268,8 +269,8 @@ const AnomalyVisualizer = React.memo(function AnomalyVisualizer({
                 transition={{ delay: index * 0.05 }}
                 className={`p-3 rounded-lg border-l-4 transition-all ${
                   isSelected
-                    ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-500'
-                    : 'bg-gray-50 dark:bg-gray-700 border-gray-300 dark:border-gray-600'
+                    ? 'bg-govBlue-50 dark:bg-govBlue-900/20 border-govBlue-500'
+                    : 'bg-govGray-50 dark:bg-gray-700 border-govGray-300 dark:border-govGray-600'
                 }`}
               >
                 <div className="flex items-start gap-3">
@@ -280,7 +281,7 @@ const AnomalyVisualizer = React.memo(function AnomalyVisualizer({
                   />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-2">
-                      <h5 className="font-semibold text-gray-900 dark:text-white text-sm">
+                      <h5 className="font-semibold text-govNavy-700 dark:text-white text-sm">
                         {anomaly.type}
                       </h5>
                       <span
@@ -293,10 +294,10 @@ const AnomalyVisualizer = React.memo(function AnomalyVisualizer({
                         {anomaly.confidence}%
                       </span>
                     </div>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
+                      <p className="text-xs text-govGray-600 dark:text-govGray-300 mt-1 line-clamp-2">
                       {anomaly.explanation}
                     </p>
-                    <div className="text-xs text-gray-500 dark:text-gray-500 mt-2">
+                    <div className="text-xs text-govGray-500 dark:text-gray-400 mt-2">
                       Location: ({anomaly.location.x}%, {anomaly.location.y}%) |
                       Size: {anomaly.location.width}% × {anomaly.location.height}%
                     </div>
@@ -313,9 +314,9 @@ const AnomalyVisualizer = React.memo(function AnomalyVisualizer({
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-300 dark:border-blue-700 rounded-lg space-y-3"
+          className="p-6 bg-govBlue-50 dark:bg-govBlue-900/20 border border-govBlue-200 dark:border-govBlue-700 rounded-lg space-y-3"
         >
-          <h4 className="font-semibold text-blue-900 dark:text-blue-200">
+          <h4 className="font-semibold text-govBlue-900 dark:text-govBlue-100">
             {selectedAnomaly.type}
           </h4>
 
@@ -324,7 +325,7 @@ const AnomalyVisualizer = React.memo(function AnomalyVisualizer({
               {Object.entries(selectedAnomaly.detailedAnalysis).map(([key, value]) => (
                 <div
                   key={key}
-                  className="flex justify-between text-sm text-blue-800 dark:text-blue-300"
+                  className="flex justify-between text-sm text-govBlue-800 dark:text-govBlue-100"
                 >
                   <span className="font-medium capitalize">{key.replace(/([A-Z])/g, ' $1')}:</span>
                   <span className="text-right">

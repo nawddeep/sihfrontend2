@@ -23,8 +23,8 @@
  * - Optimizes re-renders with React.memo
  */
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
   AlertCircle,
   CheckCircle,
@@ -63,6 +63,12 @@ export default function AIFraudDetector({
   const [selectedAnomaly, setSelectedAnomaly] = useState(null);
   const [detectionPhase, setDetectionPhase] = useState('idle');
   const [error, setError] = useState(null);
+  const prefersReducedMotion = useReducedMotion();
+  const documentDataRef = useRef(documentData);
+
+  useEffect(() => {
+    documentDataRef.current = documentData;
+  }, [documentData]);
 
   /**
    * Run fraud detection analysis
@@ -80,7 +86,7 @@ export default function AIFraudDetector({
       await new Promise(resolve => setTimeout(resolve, 500));
 
       setDetectionPhase('analyzing');
-      const result = await detectFraud(documentId, documentData);
+      const result = await detectFraud(documentId, documentDataRef.current);
       setDetection(result);
 
       // Generate explainable report
@@ -113,37 +119,46 @@ export default function AIFraudDetector({
    */
   const riskColors = useMemo(() => ({
     low: {
-      bg: 'bg-green-50 dark:bg-green-900/20',
-      border: 'border-green-300 dark:border-green-700',
-      text: 'text-green-700 dark:text-green-300',
-      badge: 'bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300',
+      bg: 'bg-govGreen-50 dark:bg-govGreen-900/20',
+      border: 'border-govGreen-200 dark:border-govGreen-700',
+      text: 'text-govGreen-700 dark:text-govGreen-200',
+      badge: 'bg-govGreen-100 dark:bg-govGreen-900/40 text-govGreen-800 dark:text-govGreen-200',
     },
     medium: {
-      bg: 'bg-yellow-50 dark:bg-yellow-900/20',
-      border: 'border-yellow-300 dark:border-yellow-700',
-      text: 'text-yellow-700 dark:text-yellow-300',
-      badge: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300',
+      bg: 'bg-warning-50 dark:bg-warning-900/20',
+      border: 'border-warning-200 dark:border-warning-700',
+      text: 'text-warning-700 dark:text-warning-200',
+      badge: 'bg-warning-100 dark:bg-warning-900/40 text-warning-800 dark:text-warning-200',
     },
     high: {
-      bg: 'bg-orange-50 dark:bg-orange-900/20',
-      border: 'border-orange-300 dark:border-orange-700',
-      text: 'text-orange-700 dark:text-orange-300',
-      badge: 'bg-orange-100 dark:bg-orange-900/40 text-orange-800 dark:text-orange-300',
+      bg: 'bg-govSaffron-50 dark:bg-govSaffron-900/20',
+      border: 'border-govSaffron-200 dark:border-govSaffron-700',
+      text: 'text-govSaffron-700 dark:text-govSaffron-200',
+      badge: 'bg-govSaffron-100 dark:bg-govSaffron-900/40 text-govSaffron-800 dark:text-govSaffron-200',
     },
     critical: {
-      bg: 'bg-red-50 dark:bg-red-900/20',
-      border: 'border-red-300 dark:border-red-700',
-      text: 'text-red-700 dark:text-red-300',
-      badge: 'bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300',
+      bg: 'bg-danger-50 dark:bg-danger-900/20',
+      border: 'border-danger-200 dark:border-danger-700',
+      text: 'text-danger-700 dark:text-danger-200',
+      badge: 'bg-danger-100 dark:bg-danger-900/40 text-danger-800 dark:text-danger-200',
     },
   }), []);
+
+  /**
+   * Auto-run detection whenever a new document is selected
+   */
+  useEffect(() => {
+    if (documentId) {
+      runDetection();
+    }
+  }, [documentId, runDetection]);
 
   if (!detection && !loading) {
     return (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"
+        className="p-6 bg-white dark:bg-gray-800 rounded-lg border border-govGray-200 dark:border-govGray-700"
       >
         <div className="space-y-4">
           <div className="flex items-center gap-3">
@@ -159,32 +174,32 @@ export default function AIFraudDetector({
           </p>
 
           <div className="grid grid-cols-3 gap-3 py-4">
-            <div className="flex items-center gap-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-              <Eye className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-              <span className="text-sm font-medium text-blue-900 dark:text-blue-300">
+            <div className="flex items-center gap-2 p-3 bg-govBlue-50 dark:bg-govBlue-900/20 rounded-lg">
+              <Eye className="w-5 h-5 text-govBlue-600 dark:text-govBlue-300" />
+              <span className="text-sm font-medium text-govBlue-900 dark:text-govBlue-200">
                 Visual Analysis
               </span>
             </div>
-            <div className="flex items-center gap-2 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-              <Brain className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-              <span className="text-sm font-medium text-purple-900 dark:text-purple-300">
+            <div className="flex items-center gap-2 p-3 bg-govSaffron-50 dark:bg-govSaffron-900/20 rounded-lg">
+              <Brain className="w-5 h-5 text-govSaffron-600 dark:text-govSaffron-300" />
+              <span className="text-sm font-medium text-govNavy-700 dark:text-govSaffron-100">
                 ML Models
               </span>
             </div>
-            <div className="flex items-center gap-2 p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg">
-              <Fingerprint className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-              <span className="text-sm font-medium text-indigo-900 dark:text-indigo-300">
+            <div className="flex items-center gap-2 p-3 bg-govGreen-50 dark:bg-govGreen-900/20 rounded-lg">
+              <Fingerprint className="w-5 h-5 text-govGreen-600 dark:text-govGreen-300" />
+              <span className="text-sm font-medium text-govGreen-900 dark:text-govGreen-100">
                 Biometrics
               </span>
             </div>
           </div>
 
           <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={prefersReducedMotion ? undefined : { scale: 1.02 }}
+            whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
             onClick={runDetection}
             disabled={loading}
-            className="w-full py-3 px-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-3 px-4 bg-gradient-to-r from-govSaffron-500 to-govBlue-600 hover:from-govSaffron-600 hover:to-govBlue-700 text-white font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-saffron-glow"
             aria-label="Start AI fraud detection"
           >
             <Zap className="w-5 h-5" />
@@ -293,7 +308,7 @@ export default function AIFraudDetector({
 
             {/* Recommendation Banner */}
             <motion.div
-              className="p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-300 dark:border-blue-700 rounded-lg"
+              className="p-4 bg-govBlue-50 dark:bg-govBlue-900/20 border border-govBlue-200 dark:border-govBlue-700 rounded-lg"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
@@ -303,10 +318,10 @@ export default function AIFraudDetector({
               <div className="flex items-start gap-3">
                 <Zap className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="font-semibold text-blue-900 dark:text-blue-200 mb-1">
+                  <h4 className="font-semibold text-govBlue-900 dark:text-govBlue-100 mb-1">
                     AI Recommendation
                   </h4>
-                  <p className="text-sm text-blue-800 dark:text-blue-300">
+                  <p className="text-sm text-govBlue-800 dark:text-govBlue-200">
                     {detection.recommendation}
                   </p>
                 </div>
@@ -322,8 +337,8 @@ export default function AIFraudDetector({
                 className="space-y-4"
               >
                 <div className="flex items-center gap-2 mb-4">
-                  <AlertCircle className="w-5 h-5 text-orange-600 dark:text-orange-400" />
-                  <h3 className="font-semibold text-gray-900 dark:text-white">
+                  <AlertCircle className="w-5 h-5 text-govSaffron-600 dark:text-govSaffron-300" />
+                  <h3 className="font-semibold text-govNavy-700 dark:text-white">
                     Detected Anomalies ({detection.detectedAnomalies.length})
                   </h3>
                 </div>
@@ -338,27 +353,27 @@ export default function AIFraudDetector({
                       transition={{ delay: 0.3 + index * 0.1 }}
                       className={`w-full text-left p-4 rounded-lg border-2 transition-all cursor-pointer ${
                         selectedAnomaly?.index === index
-                          ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20'
-                          : 'border-gray-200 dark:border-gray-700 hover:border-orange-300 dark:hover:border-orange-700'
+                          ? 'border-govSaffron-500 bg-govSaffron-50 dark:bg-govSaffron-900/20'
+                          : 'border-govGray-200 dark:border-govGray-700 hover:border-govSaffron-300 dark:hover:border-govSaffron-700'
                       }`}
                       aria-pressed={selectedAnomaly?.index === index}
                     >
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex-1">
-                          <h4 className="font-semibold text-gray-900 dark:text-white">
+                          <h4 className="font-semibold text-govNavy-700 dark:text-white">
                             {anomaly.type}
                           </h4>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                          <p className="text-sm text-govGray-600 dark:text-govGray-300 mt-1">
                             {anomaly.explanation}
                           </p>
                         </div>
                         <span
                           className={`px-2 py-1 rounded text-xs font-semibold whitespace-nowrap ml-2 ${
                             anomaly.severity === 'critical'
-                              ? 'bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-300'
+                              ? 'bg-danger-100 dark:bg-danger-900/40 text-danger-700 dark:text-danger-200'
                               : anomaly.severity === 'high'
-                              ? 'bg-orange-100 dark:bg-orange-900/40 text-orange-800 dark:text-orange-300'
-                              : 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300'
+                              ? 'bg-govSaffron-100 dark:bg-govSaffron-900/40 text-govSaffron-700 dark:text-govSaffron-200'
+                              : 'bg-warning-100 dark:bg-warning-900/40 text-warning-700 dark:text-warning-200'
                           }`}
                         >
                           {anomaly.severity.toUpperCase()}
@@ -404,10 +419,10 @@ export default function AIFraudDetector({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 space-y-4"
+              className="p-6 bg-white dark:bg-gray-800 rounded-lg border border-govGray-200 dark:border-govGray-700 space-y-4"
             >
-              <h3 className="font-semibold text-gray-900 dark:text-white flex items-center gap-2">
-                <Fingerprint className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+              <h3 className="font-semibold text-govNavy-700 dark:text-white flex items-center gap-2">
+                <Fingerprint className="w-5 h-5 text-govGreen-600 dark:text-govGreen-300" />
                 Biometric Analysis
               </h3>
 
@@ -420,24 +435,24 @@ export default function AIFraudDetector({
                 ].map((metric) => (
                   <div key={metric.label} className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <span className="text-sm font-medium text-govNavy-600 dark:text-govGray-200">
                         {metric.label}
                       </span>
-                      <span className="text-sm font-bold text-gray-900 dark:text-white">
+                      <span className="text-sm font-bold text-govNavy-700 dark:text-white">
                         {metric.value.toFixed(0)}%
                       </span>
                     </div>
-                    <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div className="h-2 bg-govGray-150 dark:bg-govGray-700 rounded-full overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${metric.value}%` }}
                         transition={{ duration: 0.8, ease: 'easeOut' }}
                         className={`h-full ${
                           metric.value >= 90
-                            ? 'bg-green-500'
+                            ? 'bg-govGreen-500'
                             : metric.value >= 70
-                            ? 'bg-yellow-500'
-                            : 'bg-red-500'
+                            ? 'bg-govSaffron-500'
+                            : 'bg-danger-500'
                         }`}
                       />
                     </div>
@@ -451,7 +466,7 @@ export default function AIFraudDetector({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.7 }}
-              className="flex flex-wrap gap-4 text-xs text-gray-500 dark:text-gray-400"
+              className="flex flex-wrap gap-4 text-xs text-govGray-600 dark:text-govGray-400"
             >
               <div className="flex items-center gap-1">
                 <Clock className="w-4 h-4" />
@@ -472,21 +487,21 @@ export default function AIFraudDetector({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
-              className="flex gap-3 pt-4"
+              className="flex gap-3 pt-4 flex-col sm:flex-row"
             >
               <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={prefersReducedMotion ? undefined : { scale: 1.02 }}
+                whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
                 onClick={runDetection}
-                className="flex-1 py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2"
+                className="flex-1 py-2 px-4 bg-govBlue-600 hover:bg-govBlue-700 text-white font-semibold rounded-lg transition-colors flex items-center justify-center gap-2 shadow-gov-md"
               >
                 <Zap className="w-4 h-4" />
                 Re-Run Detection
               </motion.button>
               <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="flex-1 py-2 px-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-white font-semibold rounded-lg transition-colors"
+                whileHover={prefersReducedMotion ? undefined : { scale: 1.02 }}
+                whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
+                className="flex-1 py-2 px-4 bg-govGray-150 dark:bg-govGray-700 hover:bg-govGray-200 dark:hover:bg-govGray-600 text-govNavy-700 dark:text-white font-semibold rounded-lg transition-colors"
               >
                 Export Report
               </motion.button>
